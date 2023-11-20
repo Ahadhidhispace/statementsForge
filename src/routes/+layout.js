@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 // @ts-nocheck
 // src/routes/+layout.ts
-export const prerender = true
+// export const prerender = true
 export const ssr = false
 
 import { redirect } from '@sveltejs/kit'

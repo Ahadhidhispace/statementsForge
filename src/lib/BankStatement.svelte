@@ -6585,27 +6585,27 @@
 						<div class="flex justify-between space-x-2 items-center w-full h-fit m-0 {transition}">
 							<button
 								on:click={(e) => {
-									$displayHeaderChoice = 0;
+									$displayHeaderChoice = 1;
 								}}
 								type="button"
-								class=" {$displayHeaderChoice === 0
+								class=" {$displayHeaderChoice === 1
 									? 'bg-gradient-to-tr from-slate-600 to-slate-400'
 									: 'bg-gradient-to-bl from-white/40 to-white/60'}   rounded-md flex items-center py-1 w-[47%] scale-100 {transition}"
 							>
 								<div
-									class="{$displayHeaderChoice === 0
+									class="{$displayHeaderChoice === 1
 										? 'bg-white/50'
 										: 'bg-gray-50/50'} {transition} rounded-sm w-6 h-6 m-2"
 								/>
 
 								<div class="flex flex-col justify-center w-[70px] h-10 space-y-1">
 									<div
-										class="{$displayHeaderChoice === 0
+										class="{$displayHeaderChoice === 1
 											? 'bg-white/50'
 											: 'bg-gray-50/50'} {transition} rounded-sm w-[80%] h-[7px]"
 									/>
 									<div
-										class="{$displayHeaderChoice === 0
+										class="{$displayHeaderChoice === 1
 											? 'bg-white/50'
 											: 'bg-gray-50/50'} {transition} rounded-sm w-[60%] h-[5px]"
 									/>
@@ -6613,13 +6613,13 @@
 							</button>
 							<button
 								on:click={(e) => {
-									$displayHeaderChoice = 1;
+									$displayHeaderChoice = 2;
 
 									removeBorders();
 								}}
 								type="button"
 								class="
-								{$displayHeaderChoice === 1
+								{$displayHeaderChoice === 2
 									? 'bg-gradient-to-tr from-slate-600 to-slate-400'
 									: 'bg-gradient-to-bl from-white/40 to-white/60'} 
 								rounded-md flex items-center py-1 w-[47%] scale-100 {transition}"
@@ -6628,17 +6628,50 @@
 
 								<div class="flex flex-col justify-center w-[70px] h-10 space-y-1 ml-2">
 									<div
-										class="{$displayHeaderChoice === 1
+										class="{$displayHeaderChoice === 2
 											? 'bg-white/50'
 											: 'bg-gray-50/50'} {transition} rounded-sm w-[80%] h-[5px]"
 									/>
 									<div
-										class="{$displayHeaderChoice === 1
+										class="{$displayHeaderChoice === 2
 											? 'bg-white/50'
 											: 'bg-gray-50/50'} {transition} rounded-sm w-[70%] h-[5px]"
 									/>
 									<div
-										class="{$displayHeaderChoice === 1
+										class="{$displayHeaderChoice === 2
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[60%] h-[5px]"
+									/>
+								</div>
+							</button>
+							<button
+								on:click={(e) => {
+									$displayHeaderChoice = 3;
+
+									removeBorders();
+								}}
+								type="button"
+								class="
+								{$displayHeaderChoice === 3
+									? 'bg-gradient-to-tr from-slate-600 to-slate-400'
+									: 'bg-gradient-to-bl from-white/40 to-white/60'} 
+								rounded-md flex items-center py-1 w-[47%] scale-100 {transition}"
+							>
+								<!-- <div class="bg-gray-50/50 rounded-sm w-6 h-6 m-2" /> -->
+
+								<div class="flex flex-col justify-center w-[70px] h-10 space-y-1 ml-2">
+									<div
+										class="{$displayHeaderChoice === 3
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[80%] h-[5px]"
+									/>
+									<div
+										class="{$displayHeaderChoice === 3
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[70%] h-[5px]"
+									/>
+									<div
+										class="{$displayHeaderChoice === 3
 											? 'bg-white/50'
 											: 'bg-gray-50/50'} {transition} rounded-sm w-[60%] h-[5px]"
 									/>

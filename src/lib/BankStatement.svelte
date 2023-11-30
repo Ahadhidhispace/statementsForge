@@ -1,5 +1,6 @@
 <script>
 	// @ts-nocheck
+	import {activeFieldName} from '../activeFieldNameStore.js' 
 
 	import { invoke } from '@tauri-apps/api/tauri';
 
@@ -16,6 +17,12 @@
 	import { cubicInOut, cubicOut, elasticOut, elasticInOut } from 'svelte/easing';
 	import { derived, writable } from 'svelte/store';
 	import { draw, fade, scale, slide } from 'svelte/transition';
+
+	// import logo images
+	import cogeBankLogo from '$lib/assets/images/CB.jpg' 
+	import equityBankLogo from '$lib/assets/images/EQ.png' 
+	import BKBankLogo from '$lib/assets/images/BK.png' 
+	import bprBankLogo from '$lib/assets/images/BPR.png' 
 
 	import Input from '$lib/Input.svelte';
 	import InputRef from '$lib/InputRef.svelte';
@@ -67,10 +74,10 @@
 	let fordgingStatus = writable('initial'); // initial, fordging, exporting, done.
 	let fordgingStatusDetail = writable('Starting...');
 	let downloadProgress = writable(0);
-	$: console.log($downloadProgress);
+	// $: console.log($downloadProgress);
 
 	// Default Header Choise
-	let displayHeaderChoice = writable(3);
+	let displayHeaderChoice = writable(4);
 
 	// Default logo Image
 	let logoUrl = writable('');
@@ -88,151 +95,7 @@
 	// let lastRowBalance = writable(initialBalance);
 	let previousRowBalance = writable($previousBalance);
 
-	// let transactions = writable([
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '3322',
-	// 		date: '03/02',
-	// 		Bookingdate: '03/02',
-	// 		valueDate: '03/02',
-
-	// 		description: 'Internet Bill',
-	// 		more: '',
-	// 		type: 'out',
-	// 		amount: 4.0,
-	// 		balance: $previousBalance
-	// 	},
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '3221',
-	// 		date: '03/05',
-	// 		Bookingdate: '03/05',
-	// 		valueDate: '03/05',
-
-	// 		description: 'Electric Bill',
-	// 		more: '',
-	// 		type: 'out',
-	// 		amount: 5000.0,
-	// 		balance: $previousBalance
-	// 	},
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '4433',
-	// 		date: '03/06',
-	// 		Bookingdate: '03/06',
-	// 		valueDate: '03/06',
-
-	// 		description: 'Check No. 4598',
-	// 		more: 'Payment from Lisa Williams',
-	// 		type: 'out',
-	// 		amount: 0.06,
-	// 		balance: $previousBalance
-	// 	},
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '3338',
-	// 		date: '03/10',
-	// 		Bookingdate: '03/10',
-	// 		valueDate: '03/10',
-
-	// 		description: 'Deposit from Credit Card Processor',
-	// 		more: '',
-	// 		type: 'in',
-	// 		amount: 9000.0,
-	// 		balance: $previousBalance
-	// 	},
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '9999',
-	// 		date: '03/12',
-	// 		Bookingdate: '03/12',
-	// 		valueDate: '03/12',
-
-	// 		description: 'Payroll Run',
-	// 		more: '',
-	// 		type: 'out',
-	// 		amount: 0.06,
-	// 		balance: $previousBalance
-	// 	},
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '1178',
-	// 		date: '03/16',
-	// 		Bookingdate: '03/16',
-	// 		valueDate: '03/16',
-
-	// 		description: 'Debit Transaction',
-	// 		more: 'Main Office Wholesale',
-	// 		type: 'in',
-	// 		amount: 28200.0,
-	// 		balance: $previousBalance
-	// 	},
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '4699',
-	// 		date: '03/21',
-	// 		Bookingdate: '03/21',
-	// 		valueDate: '03/21',
-
-	// 		description: 'Rent Bil',
-	// 		more: '',
-	// 		type: 'out',
-	// 		amount: 0.06,
-	// 		balance: $previousBalance
-	// 	},
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '4428',
-	// 		date: '03/21',
-	// 		Bookingdate: '03/21',
-	// 		valueDate: '03/21',
-
-	// 		description: 'Check No. 234',
-	// 		more: 'Payment from Mark Moore',
-	// 		type: 'out',
-	// 		amount: 4.0,
-	// 		balance: $previousBalance
-	// 	},
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '4611',
-	// 		date: '03/26',
-	// 		Bookingdate: '03/26',
-	// 		valueDate: '03/26',
-
-	// 		description: 'Payroll Run',
-	// 		more: '',
-	// 		type: 'out',
-	// 		amount: 9100.0,
-	// 		balance: $previousBalance
-	// 	},
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '4678',
-	// 		date: '03/28',
-	// 		Bookingdate: '03/28',
-	// 		valueDate: '03/28',
-
-	// 		description: 'Deposit',
-	// 		more: '',
-	// 		type: 'out',
-	// 		amount: 0.06,
-	// 		balance: $previousBalance
-	// 	},
-	// 	{
-	// 		uuid: crypto.randomUUID(),
-	// 		ref: '4278',
-	// 		date: '03/29',
-	// 		Bookingdate: '03/29',
-	// 		valueDate: '03/29',
-
-	// 		description: 'Debit Transactions',
-	// 		more: 'ABC Business Supplies',
-	// 		type: 'in',
-	// 		amount: 4800.0,
-	// 		balance: $previousBalance
-	// 	}
-	// ]);
+	
 
 	// Editor's tabs expansion variables
 	let expandedAccountInformation = writable(false);
@@ -243,12 +106,12 @@
 	let activeRecordID = writable(0);
 	let selectedCurrencyID = writable(0);
 
-	$: console.log($activeRecordID);
+	// $: console.log($activeRecordID);
 	let activeTheme = writable(12);
 
 	let isCellFocused = writable(false);
-	let activeFieldName = writable('');
-	$: console.log($activeFieldName);
+	// let activeFieldName = writable('');
+	// $: console.log($activeFieldName);
 
 	let identifier = 'showmore-field';
 
@@ -1029,7 +892,7 @@
 
 				number: {
 					label: 'Account Number',
-					value: '504428641237412'
+					value: '0000-01390051303-01' // 504428641237412
 				},
 				IBAN: {
 					label: 'IBAN Internal Bank Acc. No.',
@@ -1144,6 +1007,9 @@
 					date: '03/02',
 					Bookingdate: '03/02',
 					valueDate: '03/02',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Internet Bill',
 					more: '',
@@ -1164,6 +1030,9 @@
 					date: '03/05',
 					Bookingdate: '03/05',
 					valueDate: '03/05',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Electric Bill',
 					more: '',
@@ -1184,6 +1053,9 @@
 					date: '03/06',
 					Bookingdate: '03/06',
 					valueDate: '03/06',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Check No. 4598',
 					more: 'Payment from Lisa Williams',
@@ -1204,6 +1076,9 @@
 					date: '03/02',
 					Bookingdate: '03/02',
 					valueDate: '03/02',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Internet Bill',
 					more: '',
@@ -1224,6 +1099,9 @@
 					date: '03/05',
 					Bookingdate: '03/05',
 					valueDate: '03/05',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Electric Bill',
 					more: '',
@@ -1244,6 +1122,9 @@
 					date: '03/06',
 					Bookingdate: '03/06',
 					valueDate: '03/06',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Check No. 4598',
 					more: 'Payment from Lisa Williams',
@@ -1264,6 +1145,9 @@
 					date: '03/10',
 					Bookingdate: '03/10',
 					valueDate: '03/10',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Deposit from Credit Card Processor',
 					more: '',
@@ -1284,6 +1168,9 @@
 					date: '03/12',
 					Bookingdate: '03/12',
 					valueDate: '03/12',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Payroll Run',
 					more: '',
@@ -1304,6 +1191,9 @@
 					date: '03/16',
 					Bookingdate: '03/16',
 					valueDate: '03/16',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Debit Transaction',
 					more: 'Main Office Wholesale',
@@ -1324,6 +1214,9 @@
 					date: '03/21',
 					Bookingdate: '03/21',
 					valueDate: '03/21',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Rent Bil',
 					more: '',
@@ -1344,6 +1237,9 @@
 					date: '03/21',
 					Bookingdate: '03/21',
 					valueDate: '03/21',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Check No. 234',
 					more: 'Payment from Mark Moore',
@@ -1364,6 +1260,9 @@
 					date: '03/26',
 					Bookingdate: '03/26',
 					valueDate: '03/26',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Payroll Run',
 					more: '',
@@ -1384,6 +1283,9 @@
 					date: '03/28',
 					Bookingdate: '03/28',
 					valueDate: '03/28',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Deposit',
 					more: '',
@@ -1404,6 +1306,9 @@
 					date: '03/29',
 					Bookingdate: '03/29',
 					valueDate: '03/29',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Debit Transactions',
 					more: 'ABC Business Supplies',
@@ -1424,6 +1329,9 @@
 					date: '03/26',
 					Bookingdate: '03/26',
 					valueDate: '03/26',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Payroll Run',
 					more: '',
@@ -1444,6 +1352,9 @@
 					date: '03/28',
 					Bookingdate: '03/28',
 					valueDate: '03/28',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Deposit',
 					more: '',
@@ -1464,6 +1375,9 @@
 					date: '03/29',
 					Bookingdate: '03/29',
 					valueDate: '03/29',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Debit Transactions',
 					more: 'ABC Business Supplies',
@@ -1484,6 +1398,9 @@
 					date: '03/02',
 					Bookingdate: '03/02',
 					valueDate: '03/02',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Internet Bill',
 					more: '',
@@ -1504,6 +1421,9 @@
 					date: '03/05',
 					Bookingdate: '03/05',
 					valueDate: '03/05',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Electric Bill',
 					more: '',
@@ -1524,6 +1444,9 @@
 					date: '03/06',
 					Bookingdate: '03/06',
 					valueDate: '03/06',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Check No. 4598',
 					more: 'Payment from Lisa Williams',
@@ -1544,6 +1467,9 @@
 					date: '03/02',
 					Bookingdate: '03/02',
 					valueDate: '03/02',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Internet Bill',
 					more: '',
@@ -1564,6 +1490,9 @@
 					date: '03/05',
 					Bookingdate: '03/05',
 					valueDate: '03/05',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Electric Bill',
 					more: '',
@@ -1584,6 +1513,9 @@
 					date: '03/06',
 					Bookingdate: '03/06',
 					valueDate: '03/06',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Check No. 4598',
 					more: 'Payment from Lisa Williams',
@@ -1604,6 +1536,9 @@
 					date: '03/10',
 					Bookingdate: '03/10',
 					valueDate: '03/10',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Deposit from Credit Card Processor',
 					more: '',
@@ -1624,6 +1559,9 @@
 					date: '03/12',
 					Bookingdate: '03/12',
 					valueDate: '03/12',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Payroll Run',
 					more: '',
@@ -1644,6 +1582,9 @@
 					date: '03/16',
 					Bookingdate: '03/16',
 					valueDate: '03/16',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Debit Transaction',
 					more: 'Main Office Wholesale',
@@ -1664,6 +1605,9 @@
 					date: '03/21',
 					Bookingdate: '03/21',
 					valueDate: '03/21',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Rent Bil',
 					more: '',
@@ -1684,6 +1628,9 @@
 					date: '03/21',
 					Bookingdate: '03/21',
 					valueDate: '03/21',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Check No. 234',
 					more: 'Payment from Mark Moore',
@@ -1704,6 +1651,9 @@
 					date: '03/26',
 					Bookingdate: '03/26',
 					valueDate: '03/26',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Payroll Run',
 					more: '',
@@ -1724,6 +1674,9 @@
 					date: '03/28',
 					Bookingdate: '03/28',
 					valueDate: '03/28',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Deposit',
 					more: '',
@@ -1744,6 +1697,9 @@
 					date: '03/29',
 					Bookingdate: '03/29',
 					valueDate: '03/29',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Debit Transactions',
 					more: 'ABC Business Supplies',
@@ -1764,6 +1720,9 @@
 					date: '03/26',
 					Bookingdate: '03/26',
 					valueDate: '03/26',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Payroll Run',
 					more: '',
@@ -1784,6 +1743,9 @@
 					date: '03/28',
 					Bookingdate: '03/28',
 					valueDate: '03/28',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Deposit',
 					more: '',
@@ -1804,6 +1766,9 @@
 					date: '03/29',
 					Bookingdate: '03/29',
 					valueDate: '03/29',
+					branch: 'Branch',
+					ope: 'OPE323',
+					narration: 'BKA D00002 5046 2 BK Head Office Kigali 00RW RWF',
 
 					description: 'Debit Transactions',
 					more: 'ABC Business Supplies',
@@ -1823,7 +1788,7 @@
 				},
 				bookingDate: {
 					label: 'Booking Date',
-					terms: ['Booking Date', 'Transaction Date', 'Post Date'],
+					terms: ['Booking Date', 'Date', 'Book Date', 'Transaction Date', 'Tran Date', 'Post Date', 'Ledger Date'],
 					value: 'Booking Date',
 					render: false, // configurations.ColumnHeaders.renderBookingDateColumn
 					order: 2,
@@ -1835,6 +1800,24 @@
 					value: 'Value Date',
 					render: false, // configurations.ColumnHeaders.renderValueDateColumn
 					order: 3,
+					counter: 0
+				},
+				
+				branch: {
+					label: 'Branch',
+					terms: ['Branch'],
+					value: 'Branch',
+					render: true, // configurations.ColumnHeaders.renderRefColumn
+					order: 6,
+					counter: 0
+				}
+				,
+				ope: {
+					label: 'OPE',
+					terms: ['OPE'],
+					value: 'OPE',
+					render: true, // configurations.ColumnHeaders.renderRefColumn
+					order: 6,
 					counter: 0
 				},
 				type: {
@@ -1855,7 +1838,7 @@
 				},
 				ref: {
 					label: 'Reference',
-					terms: ['Reference', 'Ref'],
+					terms: ['Reference', 'Ref', 'Ref_No.', 'Instrument_ID', 'ID'],
 					value: 'Refence',
 					render: true, // configurations.ColumnHeaders.renderRefColumn
 					order: 6,
@@ -1863,15 +1846,23 @@
 				},
 				description: {
 					label: 'Description',
-					terms: ['Description', 'Desc'],
+					terms: ['Description', 'Desc', 'Particulars', 'Tran Particulars' ],
 					value: 'Description',
+					render: true, // configurations.ColumnHeaders.renderDescriptionColumn
+					order: 7,
+					counter: 0
+				},
+				narration: {
+					label: 'Narration',
+					terms: ['Narration'],
+					value: 'Narration',
 					render: true, // configurations.ColumnHeaders.renderDescriptionColumn
 					order: 7,
 					counter: 0
 				},
 				in: {
 					label: 'Credits',
-					terms: ['Credits', 'Deposits', 'Paid In', 'Money In'],
+					terms: ['Credits', 'Credit', 'Deposits', 'Paid In', 'Money In'],
 					value: 'Credits',
 					render: true, // configurations.ColumnHeaders.renderInColumn
 					order: 8,
@@ -1879,7 +1870,7 @@
 				},
 				out: {
 					label: 'Debits',
-					terms: ['Debits', 'Withdrawals', 'Paid Out', 'Money Out'],
+					terms: ['Debits', 'Debit', 'Withdrawals', 'Paid Out', 'Money Out'],
 					value: 'Debits',
 					render: true, // configurations.ColumnHeaders.renderOutColumn
 					order: 9,
@@ -1887,7 +1878,7 @@
 				},
 				balance: {
 					label: 'Balance',
-					terms: ['Balance'],
+					terms: ['Balance', 'Closing Balance'],
 					value: 'Balance',
 					render: true, // configurations.ColumnHeaders.renderOutColumn
 					order: 10,
@@ -1951,6 +1942,9 @@
 					renderBookingDateColumn: true, //
 					renderValueDateColumn: true,
 					renderDescriptionColumn: true,
+					renderBranchColumn: true,
+					renderOpeColumn: true,
+					renderNarrationColumn: true,
 					renderInColumn: true,
 					renderOutColumn: true,
 					renderBalanceColumn: true,
@@ -2012,7 +2006,7 @@
 	let transactions = writable($statements[0].transactions);
 	let fromSortedTransactions = [];
 
-	$: console.log($statements[0].transactionHeaders.in.counter);
+	// $: console.log($statements[0].transactionHeaders.in.counter);
 	let showMoreDescription = writable($statements[0].configurations.renderShowMoreDesc || false);
 
 	$: renderRowBorders = $statements[0].configurations.renderBorders.row.all;
@@ -2059,8 +2053,8 @@
 		lightFormat(new Date($statements[0].duration.start.value), 'yyyy/MM/dd')
 	);
 	let endDate = writable(lightFormat(new Date($statements[0].duration.end.value), 'yyyy/MM/dd'));
-	$: console.log($startDate);
-	$: console.log($endDate);
+	// $: console.log($startDate);
+	// $: console.log($endDate);
 	// let startDate = writable(new Date('2023/03/01'));
 	// let endDate = writable(new Date('2023/04/15'));
 
@@ -2228,8 +2222,8 @@
 		// $newRange.valueDate = $newValueDateDraft;
 		// clearInterval(intervalId);
 
-		console.log('Dates draft collection: ');
-		console.log($statements[0].duration.dateRanges.dateDraftColection);
+		// console.log('Dates draft collection: ');
+		// console.log($statements[0].duration.dateRanges.dateDraftColection);
 	}
 
 	function executeRandomizeDateRange() {
@@ -2278,7 +2272,7 @@
 
 		// transactions = [];
 		if (transactions.length < 1) {
-			console.log('No transactions found to process!');
+			// console.log('No transactions found to process!');
 			return false;
 		}
 		// Reset newTransactions array before calculating it again
@@ -2329,7 +2323,7 @@
 				// if (index === 0) {
 				// } else {
 				// }
-				console.log('type: ' + type);
+				// console.log('type: ' + type);
 				if (type !== undefined) {
 					if (type.toLowerCase() === 'in') {
 						$previousRowBalance = balance + amount;
@@ -2354,6 +2348,9 @@
 								$statements[0].duration.dateRanges.newRange.bookingDate[index], // $newBookingDateDraft[index], // newRange[index],
 							valueDate:
 								record.valueDate ?? $statements[0].duration.dateRanges.newRange.valueDate[index], // $newValueDateDraft[index], // newRange[index],
+							branch: record.branch,
+							ope: record.ope,
+							narration: record.narration,	
 							description: record.description,
 							more: record.more,
 							type: record.type,
@@ -2388,6 +2385,9 @@
 								$statements[0].duration.dateRanges.newRange.bookingDate[index], // $newBookingDateDraft[index],
 							valueDate:
 								record.valueDate ?? $statements[0].duration.dateRanges.newRange.valueDate[index], // $newValueDateDraft[index],
+							branch: record.branch,
+							ope: record.ope,
+							narration: record.narration,
 							description: record.description,
 							more: record.more,
 							type: record.type,
@@ -2407,7 +2407,7 @@
 
 		// executeRandomizeDateRange();
 
-		console.log(newTransactions);
+		// console.log(newTransactions);
 
 		// $statements[0].transactions.push(transactions);
 
@@ -2416,7 +2416,7 @@
 		$statements[0].accountSummary.totalBalanceOut.value = $totalBalanceOut;
 		$statements[0].accountSummary.totalBalanceIn.value = $totalBalanceIn;
 
-		console.log($statements);
+		// console.log($statements);
 
 		// transactions.reduce((prev, curr) => {
 
@@ -2427,7 +2427,7 @@
 
 	function executeDuplicateCopy(newArray) {
 		const interval = setInterval(() => {
-			console.log('2 Seconds after update!');
+			// console.log('2 Seconds after update!');
 			// const objectArray = [];
 			// for (const obj of fixDuplicateUUIDColision) {
 			// 	// $statements[0].newTransactions.push(obj);
@@ -2471,8 +2471,8 @@
 		let draftColectionSize = draftColection.length;
 		let newTransactionsColectionSize = newTransactionsColection.length;
 
-		console.log(draftColection);
-		console.log(newTransactionsColection);
+		// console.log(draftColection);
+		// console.log(newTransactionsColection);
 
 		if (newTransactionsColectionSize > 1) {
 			draftColection.forEach((record, index) => {
@@ -2511,15 +2511,6 @@
 
 	$: computePages($statements[0].newTransactions);
 
-	function removeBorders() {
-		// For Row
-		$statements[0].configurations.renderBorders.row.bottom = false;
-		$statements[0].configurations.renderBorders.row.right = false;
-		$statements[0].configurations.renderBorders.row.left = false;
-
-		// For Cell
-		$statements[0].configurations.renderBorders.cell.right = false;
-	}
 
 	// $: $statements[0].newTransactions.length > 0
 	// 	? computeTransactions($statements[0].newTransactions)
@@ -2563,7 +2554,7 @@
 				// $statements[0].configurations.pageSettings.pagesUUIDs = $statements[0].configurations.pageSettings.pagesUUIDs;
 				// console.log($statements[0].configurations.pageSettings.pagesUUIDs);
 			});
-			console.log($statements[0].configurations.pageSettings.pagesUUIDs);
+			// console.log($statements[0].configurations.pageSettings.pagesUUIDs);
 		});
 
 		// }
@@ -2577,7 +2568,7 @@
 		// 	}
 		// });
 		// return decision;
-		console.log($statements[0].configurations.pageSettings.pagesUUIDs);
+		// console.log($statements[0].configurations.pageSettings.pagesUUIDs);
 		// return $statements[0].configurations.pageSettings.pagesUUIDs;
 	}
 	// $: ;
@@ -2607,6 +2598,168 @@
 
 	let activeEditorTab = writable('');
 
+	function renderBorders(){
+		//initialize border styles when template 3
+			// For Row
+			$statements[0].configurations.renderBorders.row.all = false;
+			$statements[0].configurations.renderBorders.row.top = false;
+			$statements[0].configurations.renderBorders.row.bottom = true;
+			$statements[0].configurations.renderBorders.row.right = true;
+			$statements[0].configurations.renderBorders.row.left = true;
+
+			// For Row Padding
+			$statements[0].configurations.rowPadding.top = false;
+			$statements[0].configurations.rowPadding.bottom = false;
+
+			// For Cell
+			$statements[0].configurations.renderBorders.cell.all = false;
+			$statements[0].configurations.renderBorders.cell.top = false;
+			$statements[0].configurations.renderBorders.cell.bottom = false;
+			$statements[0].configurations.renderBorders.cell.right = true;
+			$statements[0].configurations.renderBorders.cell.left = false;
+	}
+
+	function removeBorders(){
+			$statements[0].configurations.renderBorders.row.bottom = false;
+			$statements[0].configurations.renderBorders.row.right = false;
+			$statements[0].configurations.renderBorders.row.left = false;
+
+			// For Cell
+			$statements[0].configurations.renderBorders.cell.right = false;
+	}
+
+	function applyConfiguration(templateStyle){
+
+		if(templateStyle === 1){
+
+			// require dependency
+			$statements[0].configurations.columnHeaders.renderRefColumn = true
+			$statements[0].configurations.columnHeaders.renderBookingDateColumn = true
+			$statements[0].configurations.columnHeaders.renderValueDateColumn = true
+			$statements[0].configurations.columnHeaders.renderDescriptionColumn = true
+			$statements[0].configurations.columnHeaders.renderInColumn = true
+			$statements[0].configurations.columnHeaders.renderOutColumn = true
+			$statements[0].configurations.columnHeaders.renderBalanceColumn = true 
+
+			// configure headers
+			$statements[0].transactionHeaders.bookingDate.counter = 0	
+			$statements[0].transactionHeaders.valueDate.counter = 0	
+			$statements[0].transactionHeaders.ref.counter = 0	
+			$statements[0].transactionHeaders.description.counter = 0
+			$statements[0].transactionHeaders.out.counter = 1	
+			$statements[0].transactionHeaders.in.counter = 1	
+			$statements[0].transactionHeaders.balance.counter = 0
+
+			// configure bank logo
+			$logoUrl = bprBankLogo
+
+		}else if (templateStyle === 2){
+
+
+		}else if (templateStyle === 3){
+
+			// configure headers
+			$statements[0].transactionHeaders.renderRefColumn = true
+			$statements[0].transactionHeaders.renderBookingDateColumn = true
+			$statements[0].transactionHeaders.renderValueDateColumn = true
+			$statements[0].transactionHeaders.renderDescriptionColumn = true
+			$statements[0].transactionHeaders.renderBranchColumn = true
+			$statements[0].transactionHeaders.renderOpeColumn = true
+			$statements[0].transactionHeaders.renderInColumn = true
+			$statements[0].transactionHeaders.renderOutColumn = true
+			$statements[0].transactionHeaders.renderBalanceColumn = true
+
+			// configure headers
+			$statements[0].transactionHeaders.bookingDate.counter = 4	
+			$statements[0].transactionHeaders.valueDate.counter = 0	
+			$statements[0].transactionHeaders.branch.counter = 0	
+			$statements[0].transactionHeaders.ope.counter = 0	
+			$statements[0].transactionHeaders.ref.counter = 3	
+			$statements[0].transactionHeaders.description.counter = 2
+			$statements[0].transactionHeaders.out.counter = 1	
+			$statements[0].transactionHeaders.in.counter = 1	
+			$statements[0].transactionHeaders.balance.counter = 0
+
+			// configure bank logo
+			$logoUrl = equityBankLogo
+		
+		}else if (templateStyle === 4){
+
+			// configure headers
+			$statements[0].transactionHeaders.renderValueDateColumn = true
+			$statements[0].transactionHeaders.renderBookingDateColumn = true
+			$statements[0].transactionHeaders.renderBranchColumn = true
+			$statements[0].transactionHeaders.renderOpeColumn = true
+			$statements[0].transactionHeaders.renderRefColumn = true
+			$statements[0].transactionHeaders.renderDescriptionColumn = true
+			$statements[0].transactionHeaders.renderOutColumn = true
+			$statements[0].transactionHeaders.renderInColumn = true
+			$statements[0].transactionHeaders.renderBalanceColumn = true
+
+			// configure headers
+			$statements[0].transactionHeaders.bookingDate.counter = 5	
+			$statements[0].transactionHeaders.valueDate.counter = 0	
+			$statements[0].transactionHeaders.branch.counter = 0	
+			$statements[0].transactionHeaders.ope.counter = 0	
+			$statements[0].transactionHeaders.ref.counter = 2	
+			$statements[0].transactionHeaders.description.counter = 0
+			$statements[0].transactionHeaders.out.counter = 1	
+			$statements[0].transactionHeaders.in.counter = 1	
+			$statements[0].transactionHeaders.balance.counter = 0
+
+			// configure bank logo
+			$logoUrl = cogeBankLogo
+		
+		}else if (templateStyle === 5){
+
+			// configure headers
+			$statements[0].transactionHeaders.renderBookingDateColumn = true
+			$statements[0].transactionHeaders.renderRefColumn = true
+			$statements[0].transactionHeaders.renderDescriptionColumn = true
+			$statements[0].transactionHeaders.renderNarrationColumn = true
+			$statements[0].transactionHeaders.renderValueDateColumn = true
+			$statements[0].transactionHeaders.renderOutColumn = true
+			$statements[0].transactionHeaders.renderInColumn = true
+			$statements[0].transactionHeaders.renderBalanceColumn = true
+
+			// configure headers
+			$statements[0].transactionHeaders.bookingDate.counter = 2	
+			$statements[0].transactionHeaders.ref.counter = 0	
+			$statements[0].transactionHeaders.description.counter = 0	
+			$statements[0].transactionHeaders.narration.counter = 0	
+			$statements[0].transactionHeaders.valueDate.counter = 0	
+			$statements[0].transactionHeaders.out.counter = 1	
+			$statements[0].transactionHeaders.in.counter = 1	
+			$statements[0].transactionHeaders.balance.counter = 0	
+			// configure date format
+			// configure bank logo
+			$logoUrl = BKBankLogo
+			// configure theme
+
+		}else if (templateStyle === 6){
+
+			// configure headers
+			$statements[0].transactionHeaders.renderRefColumn = false
+			$statements[0].transactionHeaders.renderBookingDateColumn = true
+			$statements[0].transactionHeaders.renderValueDateColumn = true
+			$statements[0].transactionHeaders.renderInColumn = true
+			$statements[0].transactionHeaders.renderOutColumn = true
+			$statements[0].transactionHeaders.renderBalanceColumn = true
+
+			// configure headers
+			$statements[0].transactionHeaders.bookingDate.counter = 4	
+			$statements[0].transactionHeaders.valueDate.counter = 0	
+			$statements[0].transactionHeaders.description.counter = 2
+			$statements[0].transactionHeaders.out.counter = 1	
+			$statements[0].transactionHeaders.in.counter = 1	
+			$statements[0].transactionHeaders.balance.counter = 0
+
+			// configure bank logo
+			$logoUrl = equityBankLogo	
+		}else{}
+		
+	}
+	$: console.log('active theme: ', $activeTheme)
 	onMount(() => {
 		// Initiate currency
 		$selectedCurrencyID = 0;
@@ -2639,26 +2792,39 @@
 		}
 
 		// Add event listeners for zooming and panning (you can customize these)
-		canvas?.addEventListener('wheel', (event) => {
-			if (event.deltaY > 0) {
-				zoom(0.9); // Zoom out
-			} else {
-				zoom(1.1); // Zoom in
-			}
-		});
+		// canvas?.addEventListener('wheel', (event) => {
+		// 	if (event.deltaY > 0) {
+		// 		zoom(0.99); // Zoom out
+		// 	} else {
+		// 		zoom(1.09); // Zoom in
+		// 	}
+		// });
+
+		let insideCanvas = false 
 
 		// Example panning with arrow keys
-		window.addEventListener('keydown', (event) => {
-			if (event.key === 'ArrowLeft') {
-				pan(50, 0);
-			} else if (event.key === 'ArrowRight') {
-				pan(-50, 0);
-			} else if (event.key === 'ArrowUp') {
-				pan(0, 50);
-			} else if (event.key === 'ArrowDown') {
-				pan(0, -50);
-			}
+		canvas?.addEventListener('mouseenter', (event) => {
+			insideCanvas = true
+			// console.log(event)
 		});
+		canvas?.addEventListener('mouseleave', (event) => {
+			insideCanvas = false
+			// console.log(event)
+		});
+
+		window.addEventListener('keydown', (event) => {
+
+			if (event.key === 'ArrowLeft') {
+				insideCanvas && pan(50, 0);
+			} else if (event.key === 'ArrowRight') {
+				insideCanvas && pan(-50, 0);
+			} else if (event.key === 'ArrowUp') {
+				insideCanvas && pan(0, 50);
+			} else if (event.key === 'ArrowDown') {
+				insideCanvas && pan(0, -50);
+			}
+
+		})
 
 		// Initialize the initial transform
 		//if (canvas !== null) {
@@ -2676,43 +2842,42 @@
 			}
 		});
 
-		// $statements[0].newTransactions.length > 1
-		// 	? syncDates(
-		// 			$statements[0].duration.dateRanges.dateDraftColection,
-		// 			$statements[0].newTransactions
-		// 	  )
-		// 	: '';
 
-		// canvas = document.getElementById('canvas');
+		if( $displayHeaderChoice === 1){
+			removeBorders();
+			applyConfiguration($displayHeaderChoice)
 
-		//initialize border styles
-		if ($displayHeaderChoice === 3) {
+		}else if($displayHeaderChoice === 2){
+			removeBorders();
+			applyConfiguration($displayHeaderChoice)
+
+		}else if($displayHeaderChoice === 3){
+			//initialize border styles when template 3
+			renderBorders()
+			applyConfiguration($displayHeaderChoice)
+		
+		}else if($displayHeaderChoice === 4){
+			removeBorders();
+			applyConfiguration($displayHeaderChoice)
+			
+		}else if($displayHeaderChoice === 5){
+			removeBorders();
+			applyConfiguration($displayHeaderChoice)
+			$statements[0].configurations.columnHeaders.renderNarrationColumn = true
+
+		}else if($displayHeaderChoice === 6){
+			renderBorders()
+			applyConfiguration($displayHeaderChoice)
+			
+		}else{
+			$statements[0].configurations.columnHeaders.renderNarrationColumn = false
+
+			// ===================================
+			//initialize border styles when not template 3 
 			// For Row
-			$statements[0].configurations.renderBorders.row.all = false;
-			$statements[0].configurations.renderBorders.row.top = false;
-			$statements[0].configurations.renderBorders.row.bottom = true;
-			$statements[0].configurations.renderBorders.row.right = true;
-			$statements[0].configurations.renderBorders.row.left = true;
 
-			// For Row Padding
-			$statements[0].configurations.rowPadding.top = false;
-			$statements[0].configurations.rowPadding.bottom = false;
-
-			// For Cell
-			$statements[0].configurations.renderBorders.cell.all = false;
-			$statements[0].configurations.renderBorders.cell.top = false;
-			$statements[0].configurations.renderBorders.cell.bottom = false;
-			$statements[0].configurations.renderBorders.cell.right = true;
-			$statements[0].configurations.renderBorders.cell.left = false;
-		} else {
-			// For Row
-			$statements[0].configurations.renderBorders.row.bottom = false;
-			$statements[0].configurations.renderBorders.row.right = false;
-			$statements[0].configurations.renderBorders.row.left = false;
-
-			// For Cell
-			$statements[0].configurations.renderBorders.cell.right = false;
 		}
+
 
 		executeRandomizeDateRange();
 		// console.log($statements);
@@ -2734,7 +2899,7 @@
 	});
 </script>
 
-<main class="w-screen h-screen bg-white flex relative">
+<main class="w-screen h-screen bg-white flex flex-no-wrap test:relative">
 	<section
 		class=" test: sr-only z-50 absolute top-0 left-0 flex-shrink-0 shadow-sm test:bg-[#0e0e0e] bg-[#131e1e] test:bg-gray-100 border-r border-solid border-black/5 py-10 !w-[55px] h-full"
 	/>
@@ -2742,7 +2907,7 @@
 		class=" test: sr-only z-50 absolute top-0 left-0 flex-shrink-0 shadow-sm test:bg-[#0b0b0b] bg-[#f7f7f7] test:bg-gray-100 border-r border-solid border-black/5 py-10 !w-[230px] !ml-[55px] h-full"
 	/>
 	<!-- ! #111111 -->
-	<section class="w-full h-full relative">
+	<section class="w-full h-full relative flex-1">
 		<div
 			class="absolute inset-0 z-20 flex justify-center items-center w-full h-full bg-[#f3f3f3]
 		{$statements[0].newTransactions.length > 0
@@ -2828,7 +2993,7 @@
 							// let newTransactionRecordsSeedsCollection = [];
 							// isSizeSeedable =
 							async function seedNewTransactions(seedCount, datesRange, transactionCopy) {
-								console.log(`Seeding ${seedCount} new transactions`);
+								// console.log(`Seeding ${seedCount} new transactions`);
 
 								let newTransactionSeeds = [];
 								for (let i = 1; i <= seedCount; i++) {
@@ -2847,6 +3012,9 @@
 										date: datesRange[i],
 										bookingDate: datesRange[i],
 										valueDate: datesRange[i],
+										branch: transactionCopy[i].branch,
+										ope: transactionCopy[i].ope,
+										narration: transactionCopy[i].narration,
 
 										description: transactionCopy[i].description,
 										more: transactionCopy[i].more,
@@ -2874,8 +3042,8 @@
 								} else if (requestedSeedCount <= transactionCopy.length) {
 									seedNewTransactions(requestedSeedCount, datesRange, transactionCopy).then(
 										(newTransactionSeeds) => {
-											console.log(`Seeded ${newTransactionSeeds.length} new transactions`);
-											console.log(`Loading transactions...`);
+											// console.log(`Seeded ${newTransactionSeeds.length} new transactions`);
+											// console.log(`Loading transactions...`);
 
 											computeTransactions(newTransactionSeeds);
 										}
@@ -2896,12 +3064,12 @@
 
 		<div
 			id="viewport"
-			style="background-color: rgb(237 237 237);"
-			class="canvas:container z-10 absolute inset-0 overflow-hidden w-screen h-screen transition-all duration-300 ease-out"
+			style="background-color: rgb(237 237 237); "
+			class="px-10 canvas:container z-10 absolute inset-0 overflow-auto test:w-[81%] w-full screen h-screen transition-all duration-300 ease-out scrollbar scrollbar !scrollbar-rounded-full scrollbar-thumb-[#fbfbfb] scrollbar-track-[rgb(237 237 237)] !scroll-smooth" 
 		>
 			<section
 				id="canvas"
-				class="  flex-1 flex flex-col justify-start items-center test:bg-gray-50/10 test:bg-[#0e0e0e] py-10 h-full min-w-screen w-full overflow-visible transition-all duration-300 ease-out"
+				class="  flex-1 flex flex-col justify-start items-center test:bg-gray-50/10 test:bg-[#0e0e0e] py-10 h-fit test:min-w-screen w-fit overflow-visible transition-all duration-300 ease-out"
 			>
 				{#if $statements[0].newTransactions.length > 0}
 					<!-- {#await initiateSetDates()}
@@ -3000,19 +3168,150 @@
 										</table>
 									</section>
 								{/if}
+								{#if $displayHeaderChoice === 5}
+									<section class="flex flex-col iems-center w-full">
+										<section class="flex items-center mb-5">
+											<div
+												style="background-image: url({$logoUrl || ''});"
+												class="logo:image bg-no-repeat bg-contain bg-left overflow-hidden
+														{$isShowingLogoImage === true
+													? 'scale-100 opacity-100 w-full h-[80px]'
+													: 'w-[0px] h-[0px] scale-0 opacity-0'} {transition} origin-left"
+											>
+												{#if $logoUrl === ''}
+													{#key $logoUrl}
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															viewBox="0 0 48 48"
+															class="w-full h-full"
+														>
+															<linearGradient
+																id="imCJKIfzwKtpBeBobeWKRa"
+																x1="18.766"
+																x2="27.561"
+																y1="1.896"
+																y2="42.938"
+																gradientUnits="userSpaceOnUse"
+															>
+																<stop offset="0" stop-color="#21ad64" />
+																<stop offset="1" stop-color="#088242" />
+															</linearGradient>
+															<path
+																fill="url(#imCJKIfzwKtpBeBobeWKRa)"
+																d="M41,42H7c-1.103,0-2-0.897-2-2V12.64c0-0.776,0.455-1.488,1.159-1.815l16.027-7.41c1.151-0.535,2.474-0.535,3.627,0l16.026,7.41C42.545,11.151,43,11.863,43,12.64V40C43,41.103,42.103,42,41,42z"
+															/>
+															<path
+																d="M21.724,18.649c0-0.887,0.766-1.337,2.276-1.337c2.08,0,3.8,0.661,4.641,1.055C29.162,18.612,31,18.954,31,16.885V14.79c0-1.534-0.926-2.06-1.324-2.215c-0.967-0.376-2.176-0.613-3.676-0.72V10.5C26,9.673,25.327,9,24.5,9h-1C22.673,9,22,9.673,22,10.5v1.473c-3.216,0.588-6.348,2.681-6.348,7.025c0,8.694,10.624,7.945,10.624,9.909c0,0.355,0,1.299-2.276,1.299c-2.644,0-4.965-1.082-5.613-1.413C17.876,28.53,16,28.34,16,30.262v2.383c0,0.856,0.512,1.626,1.305,1.963c1.341,0.57,3.071,1.024,4.695,1.243V37.5c0,0.827,0.673,1.5,1.5,1.5h1c0.827,0,1.5-0.673,1.5-1.5v-1.658c4.664-0.776,6.348-4.261,6.348-7.149C32.348,20.202,21.724,21.55,21.724,18.649z"
+																opacity=".05"
+															/>
+															<path
+																d="M21.224,18.649c0-1.553,1.631-1.837,2.776-1.837c1.977,0,3.743,0.582,4.853,1.103c0.478,0.224,1.647,0.244,1.647-1.03V14.79c0-1.118-0.595-1.59-1.005-1.749c-0.957-0.372-2.241-0.625-3.995-0.711V10.5c0-0.552-0.448-1-1-1h-1c-0.552,0-1,0.448-1,1v1.907c-3.166,0.446-6.348,2.372-6.348,6.59c0,8.077,10.624,6.963,10.624,9.909c0,0.795-0.394,1.799-2.776,1.799c-2.572,0-4.881-0.977-5.84-1.468c-0.469-0.241-1.66-0.177-1.66,1.024v2.384c0,0.657,0.394,1.245,1.001,1.503c1.424,0.605,3.299,1.074,4.999,1.254V37.5c0,0.552,0.448,1,1,1h1c0.552,0,1-0.448,1-1v-2.1c4.663-0.583,6.348-3.886,6.348-6.708C31.848,20.849,21.224,22.225,21.224,18.649z"
+																opacity=".07"
+															/>
+															<path
+																fill="#fff"
+																d="M31.348,28.692c0-7.196-10.624-5.791-10.624-10.043c0-2.22,2.495-2.337,3.276-2.337c1.875,0,3.685,0.503,5.065,1.15C29.5,17.667,30,17.365,30,16.885V14.79c0-0.702-0.264-1.119-0.686-1.283c-0.946-0.368-2.305-0.636-4.314-0.703V10.5c0-0.276-0.224-0.5-0.5-0.5h-1c-0.276,0-0.5,0.224-0.5,0.5v2.342c-3.116,0.305-6.348,2.063-6.348,6.156c0,7.46,10.624,5.981,10.624,9.909c0,1.235-0.789,2.299-3.276,2.299c-2.5,0-4.797-0.872-6.068-1.523C17.504,29.464,17,29.781,17,30.261v2.384c0,0.457,0.275,0.864,0.696,1.042c1.506,0.64,3.527,1.124,5.304,1.266V37.5c0,0.276,0.224,0.5,0.5,0.5h1c0.276,0,0.5-0.224,0.5-0.5v-2.541C29.663,34.569,31.348,31.448,31.348,28.692z"
+															/>
+														</svg>
+													{/key}
+												{/if}
+											</div>
+										</section>
+									</section>	
+								{/if}
+								{#if $displayHeaderChoice === 6}
+									<section class="flex justify-end items-center">
+										<h2 class="doc:pages text-xs">
+											<span class="">{pageIndex + 1}</span>
+											<span class="">/</span>
+											<!-- <span class="opacity-90"> of </span> -->
+											<span class="opacity-90"
+												>{$statements[0].configurations.pageSettings.pages.length}</span
+											>
+											<!-- <span class="opacity-90"
+												> Pages</span
+											> -->
+										</h2>
+									</section>
+									<section class="flex items-center pl-3 py-3">
+										<div
+											style="background-image: url({$logoUrl || ''});"
+											class="logo:image rounded-md bg-no-repeat bg-contain bg-center overflow-hidden border-solid border-[0.006em] border-slate-100/90
+													{$isShowingLogoImage === true
+												? 'scale-100 opacity-100 w-[50px] h-[50px]'
+												: 'w-[0px] h-[0px] scale-0 opacity-0'} {transition} origin-center"
+										>
+											{#if $logoUrl === ''}
+												{#key $logoUrl}
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														viewBox="0 0 48 48"
+														class="w-full h-full"
+													>
+														<linearGradient
+															id="imCJKIfzwKtpBeBobeWKRa"
+															x1="18.766"
+															x2="27.561"
+															y1="1.896"
+															y2="42.938"
+															gradientUnits="userSpaceOnUse"
+														>
+															<stop offset="0" stop-color="#21ad64" />
+															<stop offset="1" stop-color="#088242" />
+														</linearGradient>
+														<path
+															fill="url(#imCJKIfzwKtpBeBobeWKRa)"
+															d="M41,42H7c-1.103,0-2-0.897-2-2V12.64c0-0.776,0.455-1.488,1.159-1.815l16.027-7.41c1.151-0.535,2.474-0.535,3.627,0l16.026,7.41C42.545,11.151,43,11.863,43,12.64V40C43,41.103,42.103,42,41,42z"
+														/>
+														<path
+															d="M21.724,18.649c0-0.887,0.766-1.337,2.276-1.337c2.08,0,3.8,0.661,4.641,1.055C29.162,18.612,31,18.954,31,16.885V14.79c0-1.534-0.926-2.06-1.324-2.215c-0.967-0.376-2.176-0.613-3.676-0.72V10.5C26,9.673,25.327,9,24.5,9h-1C22.673,9,22,9.673,22,10.5v1.473c-3.216,0.588-6.348,2.681-6.348,7.025c0,8.694,10.624,7.945,10.624,9.909c0,0.355,0,1.299-2.276,1.299c-2.644,0-4.965-1.082-5.613-1.413C17.876,28.53,16,28.34,16,30.262v2.383c0,0.856,0.512,1.626,1.305,1.963c1.341,0.57,3.071,1.024,4.695,1.243V37.5c0,0.827,0.673,1.5,1.5,1.5h1c0.827,0,1.5-0.673,1.5-1.5v-1.658c4.664-0.776,6.348-4.261,6.348-7.149C32.348,20.202,21.724,21.55,21.724,18.649z"
+															opacity=".05"
+														/>
+														<path
+															d="M21.224,18.649c0-1.553,1.631-1.837,2.776-1.837c1.977,0,3.743,0.582,4.853,1.103c0.478,0.224,1.647,0.244,1.647-1.03V14.79c0-1.118-0.595-1.59-1.005-1.749c-0.957-0.372-2.241-0.625-3.995-0.711V10.5c0-0.552-0.448-1-1-1h-1c-0.552,0-1,0.448-1,1v1.907c-3.166,0.446-6.348,2.372-6.348,6.59c0,8.077,10.624,6.963,10.624,9.909c0,0.795-0.394,1.799-2.776,1.799c-2.572,0-4.881-0.977-5.84-1.468c-0.469-0.241-1.66-0.177-1.66,1.024v2.384c0,0.657,0.394,1.245,1.001,1.503c1.424,0.605,3.299,1.074,4.999,1.254V37.5c0,0.552,0.448,1,1,1h1c0.552,0,1-0.448,1-1v-2.1c4.663-0.583,6.348-3.886,6.348-6.708C31.848,20.849,21.224,22.225,21.224,18.649z"
+															opacity=".07"
+														/>
+														<path
+															fill="#fff"
+															d="M31.348,28.692c0-7.196-10.624-5.791-10.624-10.043c0-2.22,2.495-2.337,3.276-2.337c1.875,0,3.685,0.503,5.065,1.15C29.5,17.667,30,17.365,30,16.885V14.79c0-0.702-0.264-1.119-0.686-1.283c-0.946-0.368-2.305-0.636-4.314-0.703V10.5c0-0.276-0.224-0.5-0.5-0.5h-1c-0.276,0-0.5,0.224-0.5,0.5v2.342c-3.116,0.305-6.348,2.063-6.348,6.156c0,7.46,10.624,5.981,10.624,9.909c0,1.235-0.789,2.299-3.276,2.299c-2.5,0-4.797-0.872-6.068-1.523C17.504,29.464,17,29.781,17,30.261v2.384c0,0.457,0.275,0.864,0.696,1.042c1.506,0.64,3.527,1.124,5.304,1.266V37.5c0,0.276,0.224,0.5,0.5,0.5h1c0.276,0,0.5-0.224,0.5-0.5v-2.541C29.663,34.569,31.348,31.448,31.348,28.692z"
+														/>
+													</svg>
+												{/key}
+											{/if}
+										</div>
+									</section>
+									<section class="">
+										<table
+											class="table-auto flex w-[100%] mb-10 font-semibold text-sm border-b-2 border-b-black/60 border-b-solid"
+										>
+											<tbody class="flex justify-between max-h-fit">
+												<tr class=" flex flex-col">
+													<td class="font-base text-xs pb-3">
+														HEAD OFFICE: {$statements[0].bankInfo.poBox.value}, Tel: {$statements[0]
+															.bankInfo.call.office.value}
+														Fax: {$statements[0].bankInfo.fax.value}, Mobile: {$statements[0]
+															.bankInfo.call.mobile.value}, Email: {$statements[0].bankInfo.email
+															.value}, Website: {$statements[0].bankInfo.website.value}
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</section>
+								{/if}	
+
 								{#if pageIndex === 0}
 									<!-- ? Deal with template switching -->
 									{#if $displayHeaderChoice === 1}
+									<!-- {$documentThemes[$activeTheme].bgFromEven} -->
 										<section
-											class="Bank:address {$documentThemes[$activeTheme]
-												.bgFromEven} w-full h-fit p-8 flex flex-col"
+											class="Bank:address w-full h-fit test:p-8 py-8 flex flex-col"
 										>
 											<div class="flex flex-row-reverse justify-between space-x-3 items-center">
 												<div
 													style="background-image: url({$logoUrl || ''});"
-													class="logo:image rounded-md bg-no-repeat bg-contain bg-center overflow-hidden border-solid border-[0.006em] border-slate-100/90
+													class="logo:image bg-no-repeat bg-contain bg-right overflow-hidden 
 													{$isShowingLogoImage === true
-														? 'scale-100 opacity-100 w-[100px] h-[100px]'
+														? 'scale-100 opacity-100 flex-1 w-auto h-[150px]'
 														: 'w-[0px] h-[0px] scale-0 opacity-0'} {transition} origin-center"
 												>
 													{#if $logoUrl === ''}
@@ -3053,7 +3352,7 @@
 														{/key}
 													{/if}
 												</div>
-												<div class="w-[60%]">
+												<div class="w-[65%]">
 													<table class="table-auto w-[50%] font-semibold text-sm">
 														<tbody class="flex justify-between">
 															<tr class=" flex flex-col">
@@ -3078,7 +3377,7 @@
 											</div>
 										</section>
 										<section
-											class="Account:Info w-full h-auto flex justify-between px-8 py-10 text-black/60"
+											class="Account:Info w-full h-auto flex justify-between test:px-8 py-10 text-black/60"
 										>
 											<table class="table-auto w-[40%] font-semibold text-sm">
 												<tbody class="flex justify-between">
@@ -3378,12 +3677,434 @@
 												</h3>
 											</div>
 										</section>
+									{:else if $displayHeaderChoice === 4}
+										<section class="flex flex-col iems-center w-full">
+											<section class="flex items-center mb-5">
+												<div
+													style="background-image: url({$logoUrl || ''});"
+													class="logo:image bg-no-repeat bg-contain bg-left overflow-hidden
+															{$isShowingLogoImage === true
+														? 'scale-100 opacity-100 w-full h-[150px]'
+														: 'w-[0px] h-[0px] scale-0 opacity-0'} {transition} origin-left"
+												>
+													{#if $logoUrl === ''}
+														{#key $logoUrl}
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																viewBox="0 0 48 48"
+																class="w-full h-full"
+															>
+																<linearGradient
+																	id="imCJKIfzwKtpBeBobeWKRa"
+																	x1="18.766"
+																	x2="27.561"
+																	y1="1.896"
+																	y2="42.938"
+																	gradientUnits="userSpaceOnUse"
+																>
+																	<stop offset="0" stop-color="#21ad64" />
+																	<stop offset="1" stop-color="#088242" />
+																</linearGradient>
+																<path
+																	fill="url(#imCJKIfzwKtpBeBobeWKRa)"
+																	d="M41,42H7c-1.103,0-2-0.897-2-2V12.64c0-0.776,0.455-1.488,1.159-1.815l16.027-7.41c1.151-0.535,2.474-0.535,3.627,0l16.026,7.41C42.545,11.151,43,11.863,43,12.64V40C43,41.103,42.103,42,41,42z"
+																/>
+																<path
+																	d="M21.724,18.649c0-0.887,0.766-1.337,2.276-1.337c2.08,0,3.8,0.661,4.641,1.055C29.162,18.612,31,18.954,31,16.885V14.79c0-1.534-0.926-2.06-1.324-2.215c-0.967-0.376-2.176-0.613-3.676-0.72V10.5C26,9.673,25.327,9,24.5,9h-1C22.673,9,22,9.673,22,10.5v1.473c-3.216,0.588-6.348,2.681-6.348,7.025c0,8.694,10.624,7.945,10.624,9.909c0,0.355,0,1.299-2.276,1.299c-2.644,0-4.965-1.082-5.613-1.413C17.876,28.53,16,28.34,16,30.262v2.383c0,0.856,0.512,1.626,1.305,1.963c1.341,0.57,3.071,1.024,4.695,1.243V37.5c0,0.827,0.673,1.5,1.5,1.5h1c0.827,0,1.5-0.673,1.5-1.5v-1.658c4.664-0.776,6.348-4.261,6.348-7.149C32.348,20.202,21.724,21.55,21.724,18.649z"
+																	opacity=".05"
+																/>
+																<path
+																	d="M21.224,18.649c0-1.553,1.631-1.837,2.776-1.837c1.977,0,3.743,0.582,4.853,1.103c0.478,0.224,1.647,0.244,1.647-1.03V14.79c0-1.118-0.595-1.59-1.005-1.749c-0.957-0.372-2.241-0.625-3.995-0.711V10.5c0-0.552-0.448-1-1-1h-1c-0.552,0-1,0.448-1,1v1.907c-3.166,0.446-6.348,2.372-6.348,6.59c0,8.077,10.624,6.963,10.624,9.909c0,0.795-0.394,1.799-2.776,1.799c-2.572,0-4.881-0.977-5.84-1.468c-0.469-0.241-1.66-0.177-1.66,1.024v2.384c0,0.657,0.394,1.245,1.001,1.503c1.424,0.605,3.299,1.074,4.999,1.254V37.5c0,0.552,0.448,1,1,1h1c0.552,0,1-0.448,1-1v-2.1c4.663-0.583,6.348-3.886,6.348-6.708C31.848,20.849,21.224,22.225,21.224,18.649z"
+																	opacity=".07"
+																/>
+																<path
+																	fill="#fff"
+																	d="M31.348,28.692c0-7.196-10.624-5.791-10.624-10.043c0-2.22,2.495-2.337,3.276-2.337c1.875,0,3.685,0.503,5.065,1.15C29.5,17.667,30,17.365,30,16.885V14.79c0-0.702-0.264-1.119-0.686-1.283c-0.946-0.368-2.305-0.636-4.314-0.703V10.5c0-0.276-0.224-0.5-0.5-0.5h-1c-0.276,0-0.5,0.224-0.5,0.5v2.342c-3.116,0.305-6.348,2.063-6.348,6.156c0,7.46,10.624,5.981,10.624,9.909c0,1.235-0.789,2.299-3.276,2.299c-2.5,0-4.797-0.872-6.068-1.523C17.504,29.464,17,29.781,17,30.261v2.384c0,0.457,0.275,0.864,0.696,1.042c1.506,0.64,3.527,1.124,5.304,1.266V37.5c0,0.276,0.224,0.5,0.5,0.5h1c0.276,0,0.5-0.224,0.5-0.5v-2.541C29.663,34.569,31.348,31.448,31.348,28.692z"
+																/>
+															</svg>
+														{/key}
+													{/if}
+												</div>
+											</section>
+											<div class="flex justify-center items-center mb-12 w-full h-14 border-2 border-black/50">
+												<h2 class="font-bold text-xl">{$statements[0].title.value.toUpperCase()}</h2>
+											</div>
+											<div class="flex justify-between items-center w-full h-fit">
+												<div class="flex justify-between items-center w-[60%] h-fit border-[1px] border-black/50 ">
+													<!-- <h2 class="font-bold text-xl">{$statements[0].title.value.toUpperCase()}</h2> -->
+													
+														<section class="flex justify-between divide-x-[1px] divide-black/70 w-full">
+															<div class=" flex flex-col w-[30%] justify-end divide-y-[1px] divide-black/70">
+																<div class="font-normal w-full h-10 flex justify-end items-center px-3">Account Name</div>
+																<div class="font-normal w-full h-10 flex justify-end items-center px-3">Account# / Currency</div>
+																<div class="font-normal w-full h-10 flex justify-end items-center px-3">Account Type</div>
+																<div class="font-normal w-full h-10 flex justify-end items-center px-3">Address</div>
+																<!-- <div class="">Total Credits:</div>
+																<div class="">Closing Balance:</div> -->
+															</div>
+															<div class=" flex flex-col w-[70%] divide-y-[1px] divide-black/70">
+																<div class="font-bold w-full h-10 flex justify-start items-center px-3"
+																	> {$statements[0].accountInfo.name.value}</div
+																>
+																<div class="font-bold w-full h-10 flex justify-start items-center px-3"
+																	> {$statements[0].accountInfo.number.value} / {$currencies[$statements[0].accountInfo.currency.value]
+																		.currency}</div
+																>
+																<div class="font-bold w-full h-10 flex justify-start items-center px-3"
+																	> {$statements[0].accountInfo.accountType.value}</div
+																>
+																<div class="font-bold w-full h-10 flex justify-start items-center px-3"
+																	> {$statements[0].bankInfo.address.value}</div
+																>
+
+															</div>
+														</section>
+													
+												</div>
+												<div class="flex justify-between items-center w-[40%] h-fit border-[1px] border-black/50 ">
+													<section class="flex justify-between divide-x-[1px] divide-black/70 w-full">
+														<div class=" flex flex-col w-[45%] justify-end divide-y-[1px] divide-black/70">
+															<div class="font-normal w-full h-10 flex justify-end items-center px-3">Opening Balance </div>
+															<div class="font-normal w-full h-10 flex justify-end items-center px-3">Total Credits</div>
+															<div class="font-normal w-full h-10 flex justify-end items-center px-3">Total Debits</div>
+															<div class="font-normal w-full h-10 flex justify-end items-center px-3">Closing Balance</div>
+															<!-- <div class="">Total Credits:</div>
+															<div class="">Closing Balance:</div> -->
+														</div>
+														<div class=" flex flex-col w-[55%] divide-y-[1px] divide-black/70">
+															<div class="font-bold w-full h-10 flex justify-end items-center px-3"
+																> {$previousBalance !== null
+																? formatAmount(
+																		$previousBalance,
+																		'currency',
+																		$currencies[$statements[0].accountInfo.currency.value].currency,
+																		$currencies[$statements[0].accountInfo.currency.value].locale
+																  )
+																: formatAmount()}</div
+															>
+															<div class="font-bold w-full h-10 flex justify-end items-center px-3"
+																> {$totalBalanceIn !== null
+																? formatAmount(
+																		$totalBalanceIn,
+																		'currency',
+																		$currencies[$statements[0].accountInfo.currency.value].currency,
+																		$currencies[$statements[0].accountInfo.currency.value].locale
+																  )
+																: formatAmount()}</div
+															>
+															<div class="font-bold w-full h-10 flex justify-end items-center px-3"
+																> {$totalBalanceOut !== null
+																? formatAmount(
+																		$totalBalanceOut,
+																		'currency',
+																		$currencies[$statements[0].accountInfo.currency.value].currency,
+																		$currencies[$statements[0].accountInfo.currency.value].locale
+																  )
+																: formatAmount()}</div
+															>
+															<div class="font-bold w-full h-10 flex justify-end items-center px-3"
+																> {$previousRowBalance !== null
+																? formatAmount(
+																		$previousRowBalance,
+																		'currency',
+																		$currencies[$statements[0].accountInfo.currency.value].currency,
+																		$currencies[$statements[0].accountInfo.currency.value].locale
+																  )
+																: formatAmount()}</div
+															>
+
+														</div>
+													</section>
+													
+												</div>
+											</div>
+											<div class="flex justify-between items-center w-full h-10 border-[1px] border-black/50 divide-x-[1px] divide-black/50 my-6">
+												<section class="flex justify-start items-center w-[33.3333333333%] h-full divide-x-[1px] divide-black/50">
+													<div class="font-normal w-fit h-full flex justify-end items-center px-3">Start Date </div>
+													<div class="font-semibold w-fit h-full flex justify-end items-center px-3">{format(new Date($statements[0].duration.start.value), 'EEE, d MMM yyyy')} </div>
+												</section>
+												<section class="flex justify-start items-center w-[33.3333333333%] h-full divide-x-[1px] divide-black/50">
+													<div class="font-normal w-fit h-full flex justify-end items-center px-3">End Date </div>
+													<div class="font-semibold w-fit h-full flex justify-end items-center px-3">{format(new Date($statements[0].duration.end.value), 'EEE, d MMM yyyy')} </div>
+												</section>
+												<section class="flex justify-start items-center w-[33.3333333333%] h-full divide-x-[1px] divide-black/50">
+													<div class="font-normal w-[50%] h-full flex justify-start items-center px-3">Transaction Count </div>
+													<div class="font-semibold w-[50%] h-full flex justify-end items-center px-3">{$statements[0].newTransactions.length}</div>
+												</section>
+											</div>
+										</section>	
+									{:else if $displayHeaderChoice === 5}
+										<section
+											class="Account:Info w-full h-auto flex justify-between test:px-8 py-10 text-black/60"
+										>
+											<table class="table-auto w-[40%] font-semibold text-sm">
+												<tbody class="flex justify-between">
+													<tr class=" flex flex-col">
+														<td class="">Account Name:</td>
+														<td class="">Account Number:</td>
+														<td class="">Account Currency:</td>
+														<td class="">Branch Name:</td>
+														<td class="">Start Period:</td>
+														<td class="">End Period:</td>
+													</tr>
+													<tr class=" flex flex-col">
+														<td class="">{$statements[0].accountInfo.name.value}</td>
+														<td class="">{$statements[0].accountInfo.number.value}</td>
+														<td class=""
+															>{$currencies[$statements[0].accountInfo.currency.value].label}</td
+														>
+														<td class="">{$statements[0].accountInfo.branch.name.value}</td>
+														<td class=""
+															>{lightFormat(
+																new Date($statements[0].duration.start.value),
+																'yyyy/MM/dd'
+															)}</td
+														>
+														<td class=""
+															>{lightFormat(
+																new Date($statements[0].duration.end.value),
+																'yyyy/MM/dd'
+															)}</td
+														>
+													</tr>
+												</tbody>
+											</table>
+											<table class="table-auto w-[30%] font-semibold text-sm">
+												<tbody class="flex justify-between">
+													<tr class=" flex flex-col">
+														<td class="">Date:</td>
+														<td class="">Time:</td>
+														<td class="">Opening Balance:</td>
+														<td class="">Total Debits:</td>
+														<td class="">Total Credits:</td>
+														<td class="">Closing Balance:</td>
+													</tr>
+													<tr class=" flex flex-col">
+														<td class=""
+															>{format(
+																new Date($statements[0].duration.dueDate.value),
+																$statements[0].duration.dueDate.formats[0]
+															)}</td
+														>
+														<td class="">{time}</td>
+														<td class=""
+															>{$previousBalance !== null
+																? formatAmount(
+																		$previousBalance,
+																		'currency',
+																		$currencies[$statements[0].accountInfo.currency.value].currency,
+																		$currencies[$statements[0].accountInfo.currency.value].locale
+																  )
+																: formatAmount()}</td
+														>
+														<td class=""
+															>{$totalBalanceIn !== null
+																? formatAmount(
+																		$totalBalanceIn,
+																		'currency',
+																		$currencies[$statements[0].accountInfo.currency.value].currency,
+																		$currencies[$statements[0].accountInfo.currency.value].locale
+																  )
+																: formatAmount()}</td
+														>
+														<td class=""
+															>{$totalBalanceOut !== null
+																? formatAmount(
+																		$totalBalanceOut,
+																		'currency',
+																		$currencies[$statements[0].accountInfo.currency.value].currency,
+																		$currencies[$statements[0].accountInfo.currency.value].locale
+																  )
+																: formatAmount()}</td
+														>
+														<td class=""
+															>{$previousRowBalance !== null
+																? formatAmount(
+																		$previousRowBalance,
+																		'currency',
+																		$currencies[$statements[0].accountInfo.currency.value].currency,
+																		$currencies[$statements[0].accountInfo.currency.value].locale
+																  )
+																: formatAmount()}</td
+														>
+													</tr>
+												</tbody>
+											</table>
+										</section>	
+									
+
+									{:else if $displayHeaderChoice === 6}
+										<section class="flex flex-col relative">
+											<h2 class="absolute text-black/60 font-semibold text-center top-2 left-0">
+												To,
+											</h2>
+											<div class="w-full h-auto flex space-x-32 py-10 text-black/60">
+												<table
+													class="table-auto flex w-[30%] font-semibold text-sm border-2 border-black/60 border-solid"
+												>
+													<tbody class="flex justify-between max-h-fit">
+														<tr class=" flex flex-col p-2">
+															<td class="font-bold">{$statements[0].accountInfo.name.value}</td>
+															<td class="font-bold">{$statements[0].bankInfo.city.value}</td>
+															<td class="font-bold">{$statements[0].bankInfo.capital.value}</td>
+															<td class="font-bold"
+																>{$currencies[$statements[0].accountInfo.currency.value]
+																	.currency}</td
+															>
+															<td class="font-bold">{$statements[0].accountInfo.number.value}</td>
+														</tr>
+														<!-- <td class=""
+															>{lightFormat(
+																new Date($statements[0].duration.start.value),
+																'yyyy/MM/dd'
+															)}</td
+														>
+														<td class=""
+															>{lightFormat(
+																new Date($statements[0].duration.end.value),
+																'yyyy/MM/dd'
+															)}</td
+														> -->
+													</tbody>
+												</table>
+												<table class="table-auto w-[30%] font-semibold text-sm">
+													<tbody class="flex justify-between p-2">
+														<tr class=" flex flex-col">
+															<td class="font-bold">Branch ID</td>
+															<td class="font-bold">Customer Name</td>
+															<td class="font-bold">Product Name</td>
+															<td class="font-bold">Currency</td>
+															<!-- <td class="">Total Credits:</td>
+															<td class="">Closing Balance:</td> -->
+														</tr>
+														<tr class=" flex flex-col">
+															<td class="font-bold"
+																>: {$statements[0].accountInfo.branch.id.value}</td
+															>
+															<td class="font-bold"
+																>: {$statements[0].accountInfo.customer.name.value}</td
+															>
+															<td class="font-bold"
+																>: {$statements[0].accountInfo.product.name.value}</td
+															>
+															<td class="font-bold"
+																>: {$currencies[$statements[0].accountInfo.currency.value]
+																	.currency}</td
+															>
+															<!-- <td class=""
+																>USD {$totalBalanceOut !== null
+																	? formatAmount($totalBalanceOut)
+																	: formatAmount()}</td
+															>
+															<td class=""
+																>USD {$previousRowBalance !== null
+																	? formatAmount($previousRowBalance)
+																	: formatAmount()}</td
+															> -->
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											<div class="mb-5">
+												<h2 class="text-black/60 text-center font-bold">
+													{$statements[0].title.value}
+													{$statements[0].id.value}
+												</h2>
+												<h3 class="text-black/50 text-center font-semibold">
+													Statement Period (From <span class="text-black/60"
+														>{format(
+															new Date($statements[0].duration.start.value),
+															'dd-MM-yyyy'
+														)}</span
+													>
+													&nbsp;&nbsp; To
+													<span class="text-black/60"
+														>{format(
+															new Date($statements[0].duration.end.value),
+															'dd-MM-yyyy'
+														)}</span
+													>)
+												</h3>
+											</div>
+										</section>	
+									{:else}
 									{/if}
+								{:else}	
 								{/if}
 
 								{#if pageIndex !== 0}
 									<!-- ? Deal with template switching -->
 									{#if $displayHeaderChoice === 3}
+										<section class="relative mt-2 mb-5">
+											<span
+												class="doc:ref absolute -top-[5px] left-0 font-bold h-[3px] w-[10px] border-t-2 border-t-black/60 border-t-solid"
+											/>
+											<span
+												class="doc:ref absolute -bottom-[5px] left-0 font-bold h-[3px] w-[10px] border-b-2 border-b-black/60 border-b-solid"
+											/>
+											<h2 class="font-semibold">
+												Account No.: <span class="">{$statements[0].accountInfo.number.value}</span>
+											</h2>
+											<h2 class="font-semibold">
+												Customer Name: <span class=""
+													>{$statements[0].accountInfo.customer.name.value}</span
+												>
+											</h2>
+										</section>
+									{/if}
+									{#if $displayHeaderChoice === 4}
+										<section class=" headerChoice:4 flex flex-col items-center w-full">
+											<section class="flex items-center w-full mb-5">
+												<div
+													style="background-image: url({$logoUrl || ''});"
+													class="logo:image bg-no-repeat bg-contain bg-left overflow-hidden
+															{$isShowingLogoImage === true
+														? 'scale-100 opacity-100 w-full h-[80px]'
+														: 'w-[0px] h-[0px] scale-0 opacity-0'} {transition} origin-left"
+												>
+													{#if $logoUrl === ''}
+														{#key $logoUrl}
+															<svg
+																xmlns="http://www.w3.org/2000/svg"
+																viewBox="0 0 48 48"
+																class="w-full h-full"
+															>
+																<linearGradient
+																	id="imCJKIfzwKtpBeBobeWKRa"
+																	x1="18.766"
+																	x2="27.561"
+																	y1="1.896"
+																	y2="42.938"
+																	gradientUnits="userSpaceOnUse"
+																>
+																	<stop offset="0" stop-color="#21ad64" />
+																	<stop offset="1" stop-color="#088242" />
+																</linearGradient>
+																<path
+																	fill="url(#imCJKIfzwKtpBeBobeWKRa)"
+																	d="M41,42H7c-1.103,0-2-0.897-2-2V12.64c0-0.776,0.455-1.488,1.159-1.815l16.027-7.41c1.151-0.535,2.474-0.535,3.627,0l16.026,7.41C42.545,11.151,43,11.863,43,12.64V40C43,41.103,42.103,42,41,42z"
+																/>
+																<path
+																	d="M21.724,18.649c0-0.887,0.766-1.337,2.276-1.337c2.08,0,3.8,0.661,4.641,1.055C29.162,18.612,31,18.954,31,16.885V14.79c0-1.534-0.926-2.06-1.324-2.215c-0.967-0.376-2.176-0.613-3.676-0.72V10.5C26,9.673,25.327,9,24.5,9h-1C22.673,9,22,9.673,22,10.5v1.473c-3.216,0.588-6.348,2.681-6.348,7.025c0,8.694,10.624,7.945,10.624,9.909c0,0.355,0,1.299-2.276,1.299c-2.644,0-4.965-1.082-5.613-1.413C17.876,28.53,16,28.34,16,30.262v2.383c0,0.856,0.512,1.626,1.305,1.963c1.341,0.57,3.071,1.024,4.695,1.243V37.5c0,0.827,0.673,1.5,1.5,1.5h1c0.827,0,1.5-0.673,1.5-1.5v-1.658c4.664-0.776,6.348-4.261,6.348-7.149C32.348,20.202,21.724,21.55,21.724,18.649z"
+																	opacity=".05"
+																/>
+																<path
+																	d="M21.224,18.649c0-1.553,1.631-1.837,2.776-1.837c1.977,0,3.743,0.582,4.853,1.103c0.478,0.224,1.647,0.244,1.647-1.03V14.79c0-1.118-0.595-1.59-1.005-1.749c-0.957-0.372-2.241-0.625-3.995-0.711V10.5c0-0.552-0.448-1-1-1h-1c-0.552,0-1,0.448-1,1v1.907c-3.166,0.446-6.348,2.372-6.348,6.59c0,8.077,10.624,6.963,10.624,9.909c0,0.795-0.394,1.799-2.776,1.799c-2.572,0-4.881-0.977-5.84-1.468c-0.469-0.241-1.66-0.177-1.66,1.024v2.384c0,0.657,0.394,1.245,1.001,1.503c1.424,0.605,3.299,1.074,4.999,1.254V37.5c0,0.552,0.448,1,1,1h1c0.552,0,1-0.448,1-1v-2.1c4.663-0.583,6.348-3.886,6.348-6.708C31.848,20.849,21.224,22.225,21.224,18.649z"
+																	opacity=".07"
+																/>
+																<path
+																	fill="#fff"
+																	d="M31.348,28.692c0-7.196-10.624-5.791-10.624-10.043c0-2.22,2.495-2.337,3.276-2.337c1.875,0,3.685,0.503,5.065,1.15C29.5,17.667,30,17.365,30,16.885V14.79c0-0.702-0.264-1.119-0.686-1.283c-0.946-0.368-2.305-0.636-4.314-0.703V10.5c0-0.276-0.224-0.5-0.5-0.5h-1c-0.276,0-0.5,0.224-0.5,0.5v2.342c-3.116,0.305-6.348,2.063-6.348,6.156c0,7.46,10.624,5.981,10.624,9.909c0,1.235-0.789,2.299-3.276,2.299c-2.5,0-4.797-0.872-6.068-1.523C17.504,29.464,17,29.781,17,30.261v2.384c0,0.457,0.275,0.864,0.696,1.042c1.506,0.64,3.527,1.124,5.304,1.266V37.5c0,0.276,0.224,0.5,0.5,0.5h1c0.276,0,0.5-0.224,0.5-0.5v-2.541C29.663,34.569,31.348,31.448,31.348,28.692z"
+																/>
+															</svg>
+														{/key}
+													{/if}
+												</div>
+											</section>
+										
+										</section>		
+									{/if}
+									{#if $displayHeaderChoice === 6}
 										<section class="relative mt-2 mb-5">
 											<span
 												class="doc:ref absolute -top-[5px] left-0 font-bold h-[3px] w-[10px] border-t-2 border-t-black/60 border-t-solid"
@@ -3428,7 +4149,10 @@
 											</div>
 
 											<div
-												class="{$statements[0].configurations.columnHeaders
+												class="
+												{$displayHeaderChoice === 4 && 'order-first' }
+												{$displayHeaderChoice === 5 && 'order-first' }
+												{$statements[0].configurations.columnHeaders
 													.renderBookingDateColumn === true ||
 												$statements[0].configurations.columnHeaders.renderAllColumns === true
 													? 'opacity-100 scale-x-100 origin-left-right'
@@ -3442,7 +4166,10 @@
 											</div>
 
 											<div
-												class="{$statements[0].configurations.columnHeaders
+												class="
+												{$displayHeaderChoice === 4 && 'order-1' }
+												{$displayHeaderChoice === 5 && 'order-4' }
+												{$statements[0].configurations.columnHeaders
 													.renderValueDateColumn === true ||
 												$statements[0].configurations.columnHeaders.renderAllColumns === true
 													? 'opacity-100 scale-x-100 origin-left-right'
@@ -3455,14 +4182,62 @@
 												>
 											</div>
 
+											<!-- ? Branch -->
 											<div
-												class="{$statements[0].configurations.columnHeaders
+												class="
+												{$displayHeaderChoice === 4 ? ' order-2 block ':' sr-only' }
+												{$statements[0].configurations.columnHeaders.renderRefColumn ===
+													true ||
+												$statements[0].configurations.columnHeaders.renderAllColumns === true
+													? 'opacity-100 scale-x-100 origin-left-right'
+													: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} !line-clamp-1 h-full text-center px-1 w-[10%] test_bg-blue-500"
+											>
+												<span class="h-full text-center">{ $statements[0].transactionHeaders.branch.terms[
+														$statements[0].transactionHeaders.branch.counter
+													]}</span>
+											</div>
+
+											<!-- ? OPE -->
+											<div
+												class="
+												{$displayHeaderChoice === 4 ? ' order-3 block ':' sr-only' }
+												{ $statements[0].configurations.columnHeaders.renderRefColumn ===
+													true ||
+												$statements[0].configurations.columnHeaders.renderAllColumns === true
+													? 'opacity-100 scale-x-100 origin-left-right'
+													: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} !line-clamp-1 h-full text-center px-1 w-[10%] test_bg-blue-500"
+											>
+												<span class="h-full text-center">{$statements[0].transactionHeaders.ope.terms[
+														$statements[0].transactionHeaders.ope.counter
+													]}</span>
+											</div>
+
+											<!-- ? Narration -->
+											<div
+												class="
+												{$displayHeaderChoice === 5 ? ' order-3 block w-[20%] px-1':' sr-only' }
+												{ $statements[0].configurations.columnHeaders.renderNarrationColumn ===
+													true ||
+												$statements[0].configurations.columnHeaders.renderAllColumns === true
+													? 'opacity-100 scale-x-100 origin-left-right'
+													: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} !line-clamp-1 h-full px-1 test_bg-blue-500"
+											>
+												<span class="h-full {$displayHeaderChoice === 5 ? 'text-left ':'text-center' }">{$statements[0].transactionHeaders.narration.terms[
+														$statements[0].transactionHeaders.narration.counter
+													]}</span>
+											</div>
+
+											<div
+												class="
+												{$displayHeaderChoice === 4 && 'order-5' }
+												{$displayHeaderChoice === 5 ? 'order-2 w-[20%]':'w-[28%]' }
+												{$statements[0].configurations.columnHeaders
 													.renderDescriptionColumn === true ||
 												$statements[0].configurations.columnHeaders.renderAllColumns === true
 													? 'opacity-100 scale-x-100 origin-left-right'
-													: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} !line-clamp-1 h-full text-left w-[28%] px-2 test_bg-blue-500"
+													: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} !line-clamp-1 h-full text-left px-2 test_bg-blue-500"
 											>
-												<span class="h-full"
+												<span class="h-full "
 													>{$statements[0].transactionHeaders.description.terms[
 														$statements[0].transactionHeaders.description.counter
 													]}</span
@@ -3470,19 +4245,29 @@
 											</div>
 
 											<div
-												class="{$statements[0].configurations.columnHeaders.renderRefColumn ===
+												class="
+												{$displayHeaderChoice === 4 && 'order-4' }
+												{$displayHeaderChoice === 5 && 'order-1' }
+												{$displayHeaderChoice === 4 ? 'px-1 w-[10%] text-center ':'px-5 w-[20%] text-left' }
+												{$displayHeaderChoice === 5 ? 'px-1 w-[20%] text-left ':'w-[20%] text-left' }
+												{$statements[0].configurations.columnHeaders.renderRefColumn ===
 													true ||
 												$statements[0].configurations.columnHeaders.renderAllColumns === true
 													? 'opacity-100 scale-x-100 origin-left-right'
-													: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} !line-clamp-1 h-full text-left px-5 w-[20%] test_bg-blue-500"
+													: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} !line-clamp-1 h-full  test_bg-blue-500"
 											>
 												<span class="h-full">{$statements[0].transactionHeaders.ref.terms[
 														$statements[0].transactionHeaders.ref.counter
 													]}</span>
 											</div>
 
+									
+
 											<div
-												class="{$statements[0].configurations.columnHeaders.renderOutColumn ===
+												class="
+												{$displayHeaderChoice === 4 && 'order-6' }
+												{$displayHeaderChoice === 5 && 'order-5' }
+												{$statements[0].configurations.columnHeaders.renderOutColumn ===
 													true ||
 												$statements[0].configurations.columnHeaders.renderAllColumns === true
 													? 'opacity-100 scale-x-100 origin-left-right'
@@ -3494,7 +4279,10 @@
 											</div>
 
 											<div
-												class="{$statements[0].configurations.columnHeaders.renderInColumn ===
+												class="
+												{$displayHeaderChoice === 4 && 'order-7' }
+												{$displayHeaderChoice === 5 && 'order-6' }
+												{$statements[0].configurations.columnHeaders.renderInColumn ===
 													true ||
 												$statements[0].configurations.columnHeaders.renderAllColumns === true
 													? 'opacity-100 scale-x-100 origin-left-right'
@@ -3508,7 +4296,10 @@
 											</div>
 
 											<div
-												class="{$statements[0].configurations.columnHeaders.renderBalanceColumn ===
+												class="
+												{$displayHeaderChoice === 4 && 'order-last' }
+												{$displayHeaderChoice === 5 && 'order-last' }
+												{$statements[0].configurations.columnHeaders.renderBalanceColumn ===
 													true ||
 												$statements[0].configurations.columnHeaders.renderAllColumns === true
 													? 'opacity-100 scale-x-100 origin-left-right'
@@ -3522,7 +4313,7 @@
 											<!-- {/each} -->
 										</div>
 									</section>
-									{#if $displayHeaderChoice !== 3}
+									{#if $displayHeaderChoice !== 3 && $displayHeaderChoice !== 4 && $displayHeaderChoice !== 5}
 										<section class="flex flex-col w-full text-sm justify-start">
 											{#key newTransactions || $statements[0].newTransactions || $activeTheme}
 												<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -3544,7 +4335,7 @@
 														// );
 													}}
 													on:keyup={() => {
-														console.log('click');
+														// console.log('click');
 													}}
 													class=" 
 												flex justify-start {$documentThemes[$activeTheme]
@@ -3599,9 +4390,9 @@
 
 															// console.log(e.currentTarget.children);
 
-															console.log(
-																`CLICK: Selected Record: ${$selectedRowUUID} | CLICK: Current Record ${record.uuid}`
-															);
+															// console.log(
+															// 	`CLICK: Selected Record: ${$selectedRowUUID} | CLICK: Current Record ${record.uuid}`
+															// );
 														}}
 														on:focus={() => {
 															// switch tab when selecting a record
@@ -3612,9 +4403,9 @@
 															$selectedRowUUID = record.uuid;
 															$activeRecordID = index;
 
-															console.log(
-																`FOCUS: Selected Record: ${$selectedRowUUID} | FOCUS: Current Record ${record.uuid}`
-															);
+															// console.log(
+															// 	`FOCUS: Selected Record: ${$selectedRowUUID} | FOCUS: Current Record ${record.uuid}`
+															// );
 														}}
 														on:keyup={() => {
 															// switch tab when selecting a record
@@ -3622,7 +4413,7 @@
 																document.getElementById('transactionTabBtn');
 															editorTransactionTabBtn.click();
 
-															console.log('click');
+															// console.log('click');
 														}}
 														on:focuswithin={() => {
 															// switch tab when selecting a record
@@ -3631,7 +4422,7 @@
 															editorTransactionTabBtn.click();
 														}}
 														on:focusControlChanged={(e) => {
-															console.log(e.detail.control);
+															// console.log(e.detail.control);
 														}}
 														class=" 
 
@@ -3708,6 +4499,8 @@
 																// console.log(element);
 															}}
 															class="
+															{$displayHeaderChoice === 4 && 'order-first' }
+															{$displayHeaderChoice === 5 && 'order-first' }
 															{$selectedRowUUID === record.uuid ? 'py-3' : 'py-2'}
 
 															{renderCellBorders_left === true ? 'border-l-2 border-l-black/60 border-l-solid' : 'border-l-0'}
@@ -3751,6 +4544,8 @@
 																// console.log(element);
 															}}
 															class="
+															{$displayHeaderChoice === 4 && 'order-1' }
+															{$displayHeaderChoice === 5 && 'order-4' }
 															{$selectedRowUUID === record.uuid ? 'py-3' : 'py-2'}
 
 															{renderCellBorders_left === true ? 'border-l-2 border-l-black/60 border-l-solid' : 'border-l-0'}
@@ -3780,11 +4575,135 @@
 															>
 														</div>
 
+
+														<!-- ? Branch -->
 														<!-- svelte-ignore a11y-click-events-have-key-events -->
 														<div
 															on:click={(e) => {
 																// $activeEditorTab = 'transactionTab';
 																// console.log(e);
+																$activeFieldName = 'branch';
+																let element = document.getElementById('branch');
+
+																const interval = setTimeout(() => {
+																	element.focus();
+																	return clearTimeout(interval);
+																}, 500);
+																// console.log(element);
+															}}
+															class="
+															{$displayHeaderChoice === 4 && 'order-2' }
+															{$displayHeaderChoice === 4 ? 'px-1 w-[10%] text-center flex':'px-5 w-[20%] text-left hidden' }
+															{$selectedRowUUID === record.uuid ? 'py-3' : 'py-2'}
+
+															{renderCellBorders_left === true ? 'border-l-2 border-l-black/60 border-l-solid' : 'border-l-0'}
+														{renderCellBorders_right === true ? 'border-r-2 border-r-black/60 border-r-solid' : 'border-r-0'}
+														{renderCellBorders_top === true ? 'border-t-2 border-t-black/60 border-t-solid' : 'border-t-0'}
+														{renderCellBorders_bottom === true ? 'border-b-2 border-b-black/60 border-b-solid' : 'border-b-0'}
+															
+															{$statements[0].configurations.columnHeaders.renderBranchColumn === true ||
+															$statements[0].configurations.columnHeaders.renderAllColumns === true
+																? 'opacity-100 scale-x-100 origin-left-right'
+																: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} justify-center items-center"
+														>
+															<span
+																class="flex justify-center items-center !w-full {$selectedRowUUID ===
+																	record.uuid && $activeFieldName === 'branch'
+																	? `px-2 py-3 -mx-2 test:cornered rounded-sm ${$documentThemes[$activeTheme].primaryBgUseFocus} ${$documentThemes[$activeTheme].primaryGroupHoverBgUseFocus}`
+																	: `px-2 py-0 mx-0 test:cornered-none bg-current}`}
+													{transition}">{record.branch}</span
+															>
+														</div>
+
+														<!-- ? OPE -->
+														<!-- svelte-ignore a11y-click-events-have-key-events -->
+														<div
+															on:click={(e) => {
+																// $activeEditorTab = 'transactionTab';
+																// console.log(e);
+															  $activeFieldName = 'ope';
+																let element = document.getElementById('ope');
+
+																const interval = setTimeout(() => {
+																	element.focus();
+																	return clearTimeout(interval);
+																}, 500);
+																// console.log(element);
+															}}
+															class="
+															{$displayHeaderChoice === 4 && 'order-3' }
+															{$displayHeaderChoice === 4 ? 'px-1 w-[10%] text-center flex':'px-5 w-[20%] text-left hidden' }
+															{$selectedRowUUID === record.uuid ? 'py-3' : 'py-2'}
+
+															{renderCellBorders_left === true ? 'border-l-2 border-l-black/60 border-l-solid' : 'border-l-0'}
+														{renderCellBorders_right === true ? 'border-r-2 border-r-black/60 border-r-solid' : 'border-r-0'}
+														{renderCellBorders_top === true ? 'border-t-2 border-t-black/60 border-t-solid' : 'border-t-0'}
+														{renderCellBorders_bottom === true ? 'border-b-2 border-b-black/60 border-b-solid' : 'border-b-0'}
+															
+															{$statements[0].configurations.columnHeaders.renderOpeColumn === true ||
+															$statements[0].configurations.columnHeaders.renderAllColumns === true
+																? 'opacity-100 scale-x-100 origin-left-right'
+																: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition}  justify-center items-center"
+														>
+															<span
+																class="flex justify-center items-center !w-full {$selectedRowUUID ===
+																	record.uuid && $activeFieldName === 'ope'
+																	? `px-2 py-3 -mx-2 test:cornered rounded-sm ${$documentThemes[$activeTheme].primaryBgUseFocus} ${$documentThemes[$activeTheme].primaryGroupHoverBgUseFocus}`
+																	: `px-2 py-0 mx-0 test:cornered-none bg-current}`}
+													{transition}">{record.ope}</span
+															>
+														</div>
+
+
+														<!-- ? Narration -->
+														<!-- svelte-ignore a11y-click-events-have-key-events -->
+														<div
+															on:click={(e) => {
+																// $activeEditorTab = 'transactionTab';
+																// console.log(e);
+															  $activeFieldName = 'narration';
+																let element = document.getElementById('narration');
+
+																const interval = setTimeout(() => {
+																	element.focus();
+																	return clearTimeout(interval);
+																}, 500);
+																// console.log(element);
+															}}
+															class="
+															{$displayHeaderChoice === 5 && 'order-3' }
+															{$displayHeaderChoice === 5 && 'order-3' }
+															{$displayHeaderChoice === 5 ? 'px-1 w-[20%] text-left flex':'px-5 w-[20%] text-left hidden' }
+															{$selectedRowUUID === record.uuid ? 'py-3' : 'py-2'}
+
+															{renderCellBorders_left === true ? 'border-l-2 border-l-black/60 border-l-solid' : 'border-l-0'}
+														{renderCellBorders_right === true ? 'border-r-2 border-r-black/60 border-r-solid' : 'border-r-0'}
+														{renderCellBorders_top === true ? 'border-t-2 border-t-black/60 border-t-solid' : 'border-t-0'}
+														{renderCellBorders_bottom === true ? 'border-b-2 border-b-black/60 border-b-solid' : 'border-b-0'}
+															
+															{$statements[0].configurations.columnHeaders.renderNarrationColumn === true ||
+															$statements[0].configurations.columnHeaders.renderAllColumns === true
+																? 'opacity-100 scale-x-100 origin-left-right'
+																: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition}  justify-center items-center"
+														>
+															<span
+																class="flex !w-full {$selectedRowUUID ===
+																	record.uuid && $activeFieldName === 'narration'
+																	? `px-2 py-3 -mx-2 test:cornered rounded-sm ${$documentThemes[$activeTheme].primaryBgUseFocus} ${$documentThemes[$activeTheme].primaryGroupHoverBgUseFocus}`
+																	: `px-2 py-0 mx-0 test:cornered-none bg-current}`}
+
+																	{$displayHeaderChoice === 5 ? 'justify-start items-start':'justify-center items-center' }
+													{transition}">{record.narration}</span
+															>
+														</div>
+
+
+														<!-- svelte-ignore a11y-click-events-have-key-events -->
+														<div
+															on:click={(e) => {
+																// $activeEditorTab = 'transactionTab';
+																// console.log(e);
+																$activeFieldName = 'more';
 																let element = document.getElementById('more');
 
 																const interval = setTimeout(() => {
@@ -3794,6 +4713,9 @@
 																// console.log(element);
 															}}
 															class="
+															{$displayHeaderChoice === 4 && 'order-5' }
+															{$displayHeaderChoice === 5 && 'order-2' }
+															{$displayHeaderChoice === 5 ? 'w-[20%]':'w-[28%]' }
 															{$selectedRowUUID === record.uuid ? 'py-3' : 'py-2'}
 
 															{renderCellBorders_left === true ? 'border-l-2 border-l-black/60 border-l-solid' : 'border-l-0'}
@@ -3804,13 +4726,15 @@
 															{$statements[0].configurations.columnHeaders.renderDescriptionColumn === true ||
 															$statements[0].configurations.columnHeaders.renderAllColumns === true
 																? 'opacity-100 scale-x-100 origin-left-right'
-																: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} px-2 w-[28%] flex flex-col justify-center"
+																: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} px-2 flex flex-col justify-center"
 														>
 															<span
-																class="flex justify-start items-center !w-full {$selectedRowUUID ===
-																	record.uuid && $activeFieldName === 'description'
+																class="flex  !w-full {$selectedRowUUID ===
+																	record.uuid && $activeFieldName === 'more'
 																	? `px-2 py-3 -mx-2 test:cornered rounded-sm ${$documentThemes[$activeTheme].primaryBgUseFocus} ${$documentThemes[$activeTheme].primaryGroupHoverBgUseFocus}`
 																	: `px-0 py-0 mx-0 test:cornered-none bg-current}`}
+
+																	{$displayHeaderChoice === 5 ? 'justify-start items-start':'justify-start items-center' }
 													{transition}">{record.description}</span
 															>
 															{#key $showMoreDescription}
@@ -3845,6 +4769,10 @@
 																// console.log(element);
 															}}
 															class="
+															{$displayHeaderChoice === 4 && 'order-4' }
+															{$displayHeaderChoice === 5 && 'order-1' }
+															{$displayHeaderChoice === 4 ? 'px-1 w-[10%] text-center':'px-5 w-[20%] text-left' }
+															{$displayHeaderChoice === 5 ? 'px-1 w-[20%] text-left':'px-5 w-[20%] text-left' }
 															{$selectedRowUUID === record.uuid ? 'py-3' : 'py-2'}
 
 															{renderCellBorders_left === true ? 'border-l-2 border-l-black/60 border-l-solid' : 'border-l-0'}
@@ -3855,13 +4783,15 @@
 															{$statements[0].configurations.columnHeaders.renderRefColumn === true ||
 															$statements[0].configurations.columnHeaders.renderAllColumns === true
 																? 'opacity-100 scale-x-100 origin-left-right'
-																: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} px-5 w-[20%] flex justify-center items-center"
+																: 'opacity-0 !w-[0px] scale-x-0 origin-right-left'} {transition} flex justify-center items-center"
 														>
 															<span
-																class="flex justify-start items-center !w-full {$selectedRowUUID ===
+																class="
+																{$displayHeaderChoice === 4 ? 'justify-center':'justify-start' }
+																flex  items-center !w-full {$selectedRowUUID ===
 																	record.uuid && $activeFieldName === 'ref'
 																	? `px-2 py-3 -mx-2 test:cornered rounded-sm ${$documentThemes[$activeTheme].primaryBgUseFocus} ${$documentThemes[$activeTheme].primaryGroupHoverBgUseFocus}`
-																	: `px-2 py-0 mx-0 test:cornered-none bg-current}`}
+																	: `px-0 py-0 mx-0 test:cornered-none bg-current}`}
 													{transition}">{record.ref}</span
 															>
 														</div>
@@ -3880,6 +4810,8 @@
 																// console.log(element);
 															}}
 															class="
+															{$displayHeaderChoice === 4 && 'order-6' }
+															{$displayHeaderChoice === 5 && 'order-5' }
 															{$selectedRowUUID === record.uuid ? 'py-3' : 'py-2'}
 
 															{renderCellBorders_left === true ? 'border-l-2 border-l-black/60 border-l-solid' : 'border-l-0'}
@@ -3921,6 +4853,8 @@
 																// console.log(element);
 															}}
 															class="
+															{$displayHeaderChoice === 4 && 'order-7' }
+															{$displayHeaderChoice === 5 && 'order-6' }
 															{$selectedRowUUID === record.uuid ? 'py-3' : 'py-2'}
 
 															{renderCellBorders_left === true ? 'border-l-2 border-l-black/60 border-l-solid' : 'border-l-0'}
@@ -3950,6 +4884,8 @@
 
 														<div
 															class="
+															{$displayHeaderChoice === 4 && 'order-last' }
+															{$displayHeaderChoice === 5 && 'order-last' }
 															{$selectedRowUUID === record.uuid ? 'py-3' : 'py-2'}
 
 															{renderCellBorders_left === true ? 'border-l-2 border-l-black/60 border-l-solid' : 'border-l-0'}
@@ -4000,7 +4936,7 @@
 														// );
 													}}
 													on:keyup={() => {
-														console.log('click');
+														// console.log('click');
 													}}
 													class=" 
 												flex justify-start {$documentThemes[$activeTheme]
@@ -4085,6 +5021,53 @@
 									</h2>
 									<!-- {$statements[0].footer.bankOfficer.label}: {$statements[0].footer.bankOfficer.value} -->
 								</div>
+							
+							{:else if $displayHeaderChoice === 4}
+								<div
+									class="relative flex flex-col justify-center h-fit w-full test:bg-red-600 justify-self-end text-xs font-semibold text-black/70"
+								>
+
+									<h2 class="doc:note_info  flex justify-center space-x-20 text-center font-bold text-[11px]">
+										<span class="opacity-100">Account Statement for {$statements[0].accountInfo.number.value} {$currencies[$statements[0].accountInfo.currency.value].currency}</span>
+										<span class="opacity-100">
+											<span class="">-- Page {pageIndex + 1}</span>
+											<span class="opacity-90"> of </span>
+											<span class="opacity-90">{$statements[0].configurations.pageSettings.pages.length}</span>
+										</span>
+									</h2>
+
+									<!-- // {$statements[0].footer.bankOfficer.label}: {$statements[0].footer.bankOfficer.value} -->
+								</div>
+							{:else if $displayHeaderChoice === 5}
+								<div
+									class="relative border-t-2 border-black/50 flex flex-col justify-center h-fit w-full test:bg-red-600 justify-self-end text-xs font-semibold text-black/70"
+								>
+
+									<h2 class="doc:note_info  flex justify-end font-bold text-[11px] pt-2">
+										<span class="opacity-100">
+											<span class="">Page {pageIndex + 1}</span>
+											<span class="opacity-90"> of </span>
+											<span class="opacity-90">{$statements[0].configurations.pageSettings.pages.length}</span>
+										</span>
+									</h2>
+
+									<!-- // {$statements[0].footer.bankOfficer.label}: {$statements[0].footer.bankOfficer.value} -->
+								</div>
+							{:else if $displayHeaderChoice === 6}
+								<div
+									class="relative flex flex-col justify-center h-fit w-full test:bg-red-600 justify-self-end text-xs font-semibold text-black/70"
+								>
+									<span
+										class="doc:ref absolute -top-[5px] left-0 font-bold h-[3px] w-[10px] border-t-2 border-t-black/60 border-t-solid"
+									/>
+									<h2 class="doc:note_info font-bold text-[11px]">
+										<span class="opacity-100">{$statements[0].note.value} </span>
+									</h2>
+									<h2 class="doc:statement_id text-center font-bold text-[11px]">
+										{$statements[0].accountInfo.IBAN.value}
+									</h2>
+									<!-- {$statements[0].footer.bankOfficer.label}: {$statements[0].footer.bankOfficer.value} -->
+								</div>	
 							{/if}
 						</div>
 					{/each}
@@ -4103,9 +5086,9 @@
 	</section>
 
 	<section
-		class=" z-50 absolute top-0 right-0 flex-shrink-0 shadow-none test:bg-[#0b0b0b] test:bg-gray-50/70 bg-[#fbfbfb] test:bg-white border-none border test:border-solid border-black/50 test_py-10 !w-[250px] h-screen scroll-smooth scrollbar-thin overflow-hidden"
+		class=" test:z-50 test:absolute test:top-0 test:right-0 flex-shrink-0 shadow-none test:bg-[#0b0b0b] test:bg-gray-50/70 bg-[#fbfbfb] test:bg-white border-none border test:border-solid border-black/50 test_py-10 !w-[250px] h-screen scroll-smooth scrollbar-thin overflow-hidden"
 	>
-		<div class="tabs flex w-[95%] p-2 h-fit test:bg-purple-300/60">
+		<div class="tabs flex justify-between items-center w-[95%] p-2 h-fit bg-[#2f4f4f05] m-[5px] rounded-md">
 			<button
 				on:click={() => {
 					$activeEditorTab = 'statementTab';
@@ -4117,9 +5100,13 @@
 				}}
 				id="statementTabBtn"
 				class="py-3 px-4 {$activeEditorTab === 'statementTab'
-					? ' text-white bg-slate-600'
+					? ' text-[#00599991] bg-[#7878780a]'
 					: 'bg-transparent  text-slate-400'} text-xs font-semibold w-fit rounded-md line-clamp-1"
-				type="button">St.mnt</button
+				type="button">
+					<svg class=" fill-current" viewBox="0 0 48 48" width="30" height="30">
+						<path d="M41.877,12.214L26.565,4.601c-1.607-0.8-3.524-0.8-5.132,0L6.092,12.23c-0.815,0.429-1.23,1.354-1.01,2.25C5.304,15.375,6.102,16,7.023,16H10.5c0.828,0,1.5,0.672,1.5,1.5S11.328,19,10.5,19c-0.231,0-1.146,0-3.5,0v5v14.5c0,3.033,2.468,5.5,5.5,5.5h23c3.032,0,5.5-2.467,5.5-5.5V26v-7c-2.429,0-3.268,0-3.5,0c-0.828,0-1.5-0.672-1.5-1.5s0.672-1.5,1.5-1.5h3.477c0.922,0,1.72-0.625,1.941-1.52C43.139,13.585,42.724,12.66,41.877,12.214z M25.375,34.25v1.375C25.375,36.384,24.76,37,24,37s-1.375-0.616-1.375-1.375v-1.38c-1.71-0.013-3.275-0.638-4.41-1.773c-0.537-0.537-0.537-1.407,0-1.944c0.537-0.537,1.408-0.537,1.945,0c0.443,0.443,1.24,0.972,2.517,0.972h2.698c1.137,0,2.063-0.925,2.063-2.062c0-1.138-0.926-2.063-2.063-2.063h-2.406c-2.654,0-4.813-2.159-4.813-4.813c0-2.535,1.978-4.598,4.469-4.777v-1.41C22.625,15.616,23.24,15,24,15s1.375,0.616,1.375,1.375v1.396c2.123,0.107,3.478,1.321,3.905,1.984c0.412,0.638,0.228,1.489-0.41,1.9c-0.639,0.409-1.49,0.228-1.9-0.41v0.001c-0.004,0-0.595-0.746-1.887-0.746h-2.114c-1.137,0-2.063,0.925-2.063,2.062c0,1.138,0.926,2.063,2.063,2.063h2.406c2.653,0,4.812,2.159,4.812,4.813C30.187,32.091,28.028,34.25,25.375,34.25z"/>
+					</svg>
+				</button
 			>
 			<button
 				on:click={() => {
@@ -4132,9 +5119,13 @@
 				}}
 				id="transactionTabBtn"
 				class="py-3 px-4 {$activeEditorTab === 'transactionTab'
-					? ' text-white bg-slate-600'
+					? ' text-[#00599991] bg-[#7878780a]'
 					: 'bg-transparent  text-slate-400'} text-xs font-semibold w-fit rounded-md line-clamp-1"
-				type="button">Trans</button
+				type="button">
+					<svg class=" fill-current" viewBox="0 0 48 48" width="30" height="30">
+						<path d="M24 4C18.556953 4 13.61141 6.1899788 10 9.7304688L10 9 A 2.0002 2.0002 0 0 0 7.9707031 6.9726562 A 2.0002 2.0002 0 0 0 6 9L6 15 A 2.0002 2.0002 0 0 0 8 17L14 17 A 2.0002 2.0002 0 1 0 14 13L12.382812 13C15.296186 9.9213791 19.413148 8 24 8C32.860089 8 40 15.139911 40 24C40 32.860089 32.860089 40 24 40 A 2.0002 2.0002 0 1 0 24 44C35.021911 44 44 35.021911 44 24C44 12.978089 35.021911 4 24 4 z M 23.970703 10.972656 A 2.0002 2.0002 0 0 0 22 13L22 13.255859C19.182699 13.858059 17 16.264295 17 19.25C17 22.678096 19.821904 25.5 23.25 25.5L24.25 25.5C25.791795 25.5 27 26.708205 27 28.25C27 29.791795 25.791795 31 24.25 31L23 31C22.049677 31 21.286938 30.361997 21.064453 29.507812 A 2.0002 2.0002 0 1 0 17.193359 30.515625C17.781865 32.775064 19.687421 34.428067 22 34.830078L22 35 A 2.0002 2.0002 0 1 0 26 35L26 34.642578C28.846019 33.850008 31 31.334933 31 28.25C31 24.545795 27.954205 21.5 24.25 21.5L23.25 21.5C21.984096 21.5 21 20.515904 21 19.25C21 17.984096 21.984096 17 23.25 17L24.5 17C25.443192 17 26.203383 17.632009 26.431641 18.476562 A 2.0002 2.0002 0 1 0 30.292969 17.431641C29.733 15.359757 28.066282 13.796644 26 13.253906L26 13 A 2.0002 2.0002 0 0 0 23.970703 10.972656 z M 6 22.039062C4.89 22.039062 4 22.939062 4 24.039062C4 25.149062 4.9 26.039062 6 26.039062C7.11 26.029062 8 25.139297 8 24.029297C8 22.929297 7.1 22.039062 6 22.039062 z M 7.3886719 28.917969C7.1289844 28.916094 6.864375 28.965312 6.609375 29.070312C5.589375 29.500312 5.1092969 30.669453 5.5292969 31.689453C5.8492969 32.459453 6.6008594 32.919922 7.3808594 32.919922C7.6408594 32.919922 7.9003906 32.869531 8.1503906 32.769531C9.1703906 32.339531 9.6507031 31.170391 9.2207031 30.150391C8.9057031 29.385391 8.1677344 28.923594 7.3886719 28.917969 z M 11.287109 34.744141C10.775859 34.744141 10.265859 34.940078 9.8808594 35.330078C9.0908594 36.120078 9.1008594 37.380156 9.8808594 38.160156C10.270859 38.550156 10.779062 38.75 11.289062 38.75C11.799062 38.75 12.320937 38.550156 12.710938 38.160156C13.490938 37.380156 13.479219 36.110078 12.699219 35.330078C12.309219 34.940078 11.798359 34.744141 11.287109 34.744141 z M 17.115234 38.644531C16.331953 38.64875 15.594297 39.115859 15.279297 39.880859C14.859297 40.900859 15.349141 42.070234 16.369141 42.490234C16.619141 42.590234 16.880859 42.640625 17.130859 42.640625C17.920859 42.640625 18.660469 42.180156 18.980469 41.410156C19.400469 40.390156 18.920391 39.219062 17.900391 38.789062L17.900391 38.800781C17.642891 38.693281 17.376328 38.643125 17.115234 38.644531 z"/>
+					</svg>
+				</button
 			>
 			<button
 				on:click={() => {
@@ -4147,9 +5138,13 @@
 				}}
 				id="componentsTabBtn"
 				class="py-3 px-4 {$activeEditorTab === 'componentsTab'
-					? ' text-white bg-slate-600'
+					? ' text-[#00599991] bg-[#7878780a]'
 					: 'bg-transparent  text-slate-400'} text-xs font-semibold w-fit rounded-md line-clamp-1"
-				type="button">Components</button
+				type="button">
+					<svg class=" fill-current" viewBox="0 0 48 48" width="30" height="30">
+						<path d="M9 38.5c0 .17.01.34.03.5H5.5C3.57 39 2 37.43 2 35.5v-23C2 10.57 3.57 9 5.5 9h3.53C9.01 9.16 9 9.33 9 9.5V38.5zM46 12.5v23c0 1.93-1.57 3.5-3.5 3.5h-3.53c.02-.16.03-.33.03-.5v-29c0-.17-.01-.34-.03-.5h3.53C44.43 9 46 10.57 46 12.5zM33.5 6h-19C12.57 6 11 7.57 11 9.5v29c0 1.93 1.57 3.5 3.5 3.5h19c1.93 0 3.5-1.57 3.5-3.5v-29C37 7.57 35.43 6 33.5 6zM18.5 35c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5S19.328 35 18.5 35zM18.5 29c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5S19.328 29 18.5 29zM18.5 23c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5S19.328 23 18.5 23zM29.5 35h-6c-.829 0-1.5-.672-1.5-1.5s.671-1.5 1.5-1.5h6c.829 0 1.5.672 1.5 1.5S30.329 35 29.5 35zM29.5 29h-6c-.829 0-1.5-.672-1.5-1.5s.671-1.5 1.5-1.5h6c.829 0 1.5.672 1.5 1.5S30.329 29 29.5 29zM29.5 23h-6c-.829 0-1.5-.672-1.5-1.5s.671-1.5 1.5-1.5h6c.829 0 1.5.672 1.5 1.5S30.329 23 29.5 23zM29.5 16h-11c-.829 0-1.5-.672-1.5-1.5s.671-1.5 1.5-1.5h11c.829 0 1.5.672 1.5 1.5S30.329 16 29.5 16z"/>
+					</svg>
+				</button
 			>
 		</div>
 		<div class="flex justify-center items-center w-full py-4">
@@ -4163,7 +5158,7 @@
 					async function generatePDF() {
 						const content = document.getElementById('page_0');
 
-						console.log(content);
+						// console.log(content);
 						// return;
 
 						if (!content) {
@@ -4244,7 +5239,7 @@
 					async function mergePDFs(pdfs) {
 						$fordgingStatusDetail = 'Extracting pages...';
 						const pdfDoc = await PDFDocument.create();
-						console.log(pdfDoc);
+						// console.log(pdfDoc);
 						pdfDoc.setCreationDate(new Date());
 						pdfDoc.setModificationDate(new Date());
 						pdfDoc.setProducer('StatementsForge Pro 1.0');
@@ -4259,7 +5254,7 @@
 							const existingPage = await pdfDoc.copyPages(await PDFDocument.load(pdfs[idx]), [0]);
 							pages.push(existingPage[0]);
 						}
-						console.log(pages);
+						// console.log(pages);
 						$fordgingStatus = 'fordging';
 						$fordgingStatusDetail = 'Collecting pages...';
 
@@ -4284,10 +5279,10 @@
 
 					// Call the forgePDFs function
 					forgePDFs().then((forgedPDFs) => {
-						console.log('Forged PDFs:', forgedPDFs);
+						// console.log('Forged PDFs:', forgedPDFs);
 
 						mergePDFs(forgedPDFs).then((mergedPDFBytes) => {
-							console.log('Merged PDFs:', mergedPDFBytes);
+							// console.log('Merged PDFs:', mergedPDFBytes);
 							// mergedPDFBytes.save();
 
 							async function savePdf(data) {
@@ -4325,7 +5320,7 @@
 										// Calculate and display download progress
 										const progress = (loaded / total) * 100;
 										$downloadProgress = progress;
-										console.log(`Download Progress: ${progress.toFixed(2)}%`);
+										// console.log(`Download Progress: ${progress.toFixed(2)}%`);
 									}
 								});
 
@@ -4482,7 +5477,7 @@
 									</InputDate>
 									<InputNumber
 										on:numberChanged={(e) => {
-											console.log(e.detail.numberVal);
+											// console.log(e.detail.numberVal);
 											computeTransactions($statements[0].newTransactions);
 										}}
 										bind:inputValue={$previousBalance}
@@ -4590,7 +5585,7 @@
 													);
 													// randomizeDateRange($dateRange);
 
-													console.log($dateRange);
+													// console.log($dateRange);
 
 													// console.log(`This date is out of range: ${e.detail.dateVal}`);
 													// if (
@@ -4638,7 +5633,7 @@
 													// const startDateElmt = document.getElementById('startdate');
 													startDateElmtIsON = !startDateElmtIsON;
 
-													console.log(e.currentTarget.parentNode.childNodes[0]);
+													// console.log(e.currentTarget.parentNode.childNodes[0]);
 												}}
 											>
 												<svg
@@ -4703,7 +5698,7 @@
 													);
 													// randomizeDateRange($dateRange);
 
-													console.log($dateRange);
+													// console.log($dateRange);
 
 													// console.log(`This date is out of range: ${e.detail.dateVal}`);
 													// if (
@@ -4751,7 +5746,7 @@
 													// const startDateElmt = document.getElementById('startdate');
 													endDateElmtIsON = !endDateElmtIsON;
 
-													console.log(e.currentTarget.parentNode.childNodes[0]);
+													// console.log(e.currentTarget.parentNode.childNodes[0]);
 												}}
 											>
 												<svg
@@ -4951,6 +5946,20 @@
 											guidePlaceholder="Type now..."
 											message="You messed up"
 											identifier="statementAccountName"
+										>
+											<!-- <path
+											slot="icon"
+											d="M23.958984 2 A 1.50015 1.50015 0 0 0 23.455078 2.1035156L2.9550781 10.103516 A 1.50015 1.50015 0 1 0 4.0449219 12.896484L24 5.109375L43.955078 12.896484 A 1.50015 1.50015 0 1 0 45.044922 10.103516L24.544922 2.1035156 A 1.50015 1.50015 0 0 0 23.958984 2 z M 9 15C7.343 15 6 16.343 6 18L6 39C6 40.657 7.343 42 9 42L20.554688 42C21.247688 43.191 22.523 44 24 44C25.477 44 26.752312 43.191 27.445312 42L39 42C40.657 42 42 40.657 42 39L42 18C42 16.343 40.657 15 39 15L30 15C27.515 15 25.5 17.015 25.5 19.5L25.5 38.5C25.5 39.328 24.828 40 24 40C23.172 40 22.5 39.328 22.5 38.5L22.5 19.5C22.5 17.015 20.485 15 18 15L9 15 z"
+										/> -->
+										</Input>
+										<Input
+											uuid={crypto.randomUUID()}
+											field="statementAccountNumber"
+											bind:inputValue={$statements[0].accountInfo.number.value}
+											placeholder={$statements[0].accountInfo.number.label}
+											guidePlaceholder="Type now..."
+											message="You messed up"
+											identifier="statementAccountNumber"
 										>
 											<!-- <path
 											slot="icon"
@@ -5328,7 +6337,7 @@
 										// Get transaction last record
 										let storeSize = newTransactionStoreArray.length;
 
-										if (storeSize < 1) {
+										if (storeSizepiece < 1) {
 											// We have no transactions yet
 											const newRecordInfo = 'NO_RECORD_FOUND';
 											return newRecordInfo;
@@ -5358,6 +6367,9 @@
 												date: date,
 												bookingDate: date,
 												valueDate: date,
+												branch: '',
+												ope: '',
+												narration: '',
 
 												description: '',
 												more: '',
@@ -5380,13 +6392,13 @@
 
 										gatherNewRecordInfo($statements[0].newTransactions).then((data) => {
 											if (data === 'NO_RECORD_FOUND') {
-												console.log('New record data no record: ');
-												console.log(data);
+												// console.log('New record data no record: ');
+												// console.log(data);
 												// Create new record immediately
 												buildNewRecordCopies(createNewRecordDefaultCount, newRecordDate).then(
 													(newTransactionRecordPieces) => {
-														console.log('New Record Pieces: ');
-														console.log(newTransactionRecordPieces);
+														// console.log('New Record Pieces: ');
+														// console.log(newTransactionRecordPieces);
 														newTransactionRecordsCollection = $statements[0].newTransactions.concat(
 															newTransactionRecordPieces
 														);
@@ -5402,14 +6414,14 @@
 											} else if (typeof data === 'object') {
 												// Rtrieve and assign new record info
 												newRecordDate = data.newRecordInfo.bookingDate;
-												console.log('New record data object: ');
-												console.log(data);
+												// console.log('New record data object: ');
+												// console.log(data);
 												// let recordId = data.recordId
 
 												buildNewRecordCopies(createNewRecordDefaultCount, newRecordDate).then(
 													(newTransactionRecordPieces) => {
-														console.log('New Record Pieces: ');
-														console.log(newTransactionRecordPieces);
+														// console.log('New Record Pieces: ');
+														// console.log(newTransactionRecordPieces);
 														newTransactionRecordsCollection = $statements[0].newTransactions.concat(
 															newTransactionRecordPieces
 														);
@@ -5437,13 +6449,13 @@
 
 										gatherNewRecordInfo($statements[0].newTransactions).then((data) => {
 											if (data === 'NO_RECORD_FOUND') {
-												console.log('New record data no record: ');
-												console.log(data);
+												// console.log('New record data no record: ');
+												// console.log(data);
 												// Create new record immediately
 												buildNewRecordCopies(createNewRecordDefaultCount, newRecordDate).then(
 													(newTransactionRecordPieces) => {
-														console.log('New Record Pieces: ');
-														console.log(newTransactionRecordPieces);
+														// console.log('New Record Pieces: ');
+														// console.log(newTransactionRecordPieces);
 														newTransactionRecordsCollection = $statements[0].newTransactions.concat(
 															newTransactionRecordPieces
 														);
@@ -5459,14 +6471,14 @@
 											} else if (typeof data === 'object') {
 												// Rtrieve and assign new record info
 												newRecordDate = data.newRecordInfo.bookingDate;
-												console.log('New record data object: ');
-												console.log(data);
+												// console.log('New record data object: ');
+												// console.log(data);
 												// let recordId = data.recordId
 
 												buildNewRecordCopies(createNewRecordDefaultCount, newRecordDate).then(
 													(newTransactionRecordPieces) => {
-														console.log('New Record Pieces: ');
-														console.log(newTransactionRecordPieces);
+														// console.log('New Record Pieces: ');
+														// console.log(newTransactionRecordPieces);
 														newTransactionRecordsCollection = $statements[0].newTransactions.concat(
 															newTransactionRecordPieces
 														);
@@ -5673,7 +6685,7 @@
 
 										const capturedPreviousActiveRecordID = $activeRecordID;
 										const interval = setInterval(() => {
-											console.log('2 Seconds after update!');
+											// console.log('2 Seconds after update!');
 											// $statements[0].newTransactions = $statements[0].newTransactions.sort((a, b) => {
 											// 	return new Date(a.bookingDate) - new Date(b.bookingDate);
 											// });
@@ -5814,6 +6826,48 @@
 									d="M23.958984 2 A 1.50015 1.50015 0 0 0 23.455078 2.1035156L2.9550781 10.103516 A 1.50015 1.50015 0 1 0 4.0449219 12.896484L24 5.109375L43.955078 12.896484 A 1.50015 1.50015 0 1 0 45.044922 10.103516L24.544922 2.1035156 A 1.50015 1.50015 0 0 0 23.958984 2 z M 9 15C7.343 15 6 16.343 6 18L6 39C6 40.657 7.343 42 9 42L20.554688 42C21.247688 43.191 22.523 44 24 44C25.477 44 26.752312 43.191 27.445312 42L39 42C40.657 42 42 40.657 42 39L42 18C42 16.343 40.657 15 39 15L30 15C27.515 15 25.5 17.015 25.5 19.5L25.5 38.5C25.5 39.328 24.828 40 24 40C23.172 40 22.5 39.328 22.5 38.5L22.5 19.5C22.5 17.015 20.485 15 18 15L9 15 z"
 								/> -->
 							</Input>
+							<Input
+								uuid={$statements[0].newTransactions[$activeRecordID]?.uuid}
+								bind:field={$activeFieldName}
+								bind:inputValue={$statements[0].newTransactions[$activeRecordID].branch}
+								placeholder="Branch"
+								guidePlaceholder="Type now..."
+								message="You messed up"
+								identifier="branch"
+							>
+								<!-- <path
+									slot="icon"
+									d="M23.958984 2 A 1.50015 1.50015 0 0 0 23.455078 2.1035156L2.9550781 10.103516 A 1.50015 1.50015 0 1 0 4.0449219 12.896484L24 5.109375L43.955078 12.896484 A 1.50015 1.50015 0 1 0 45.044922 10.103516L24.544922 2.1035156 A 1.50015 1.50015 0 0 0 23.958984 2 z M 9 15C7.343 15 6 16.343 6 18L6 39C6 40.657 7.343 42 9 42L20.554688 42C21.247688 43.191 22.523 44 24 44C25.477 44 26.752312 43.191 27.445312 42L39 42C40.657 42 42 40.657 42 39L42 18C42 16.343 40.657 15 39 15L30 15C27.515 15 25.5 17.015 25.5 19.5L25.5 38.5C25.5 39.328 24.828 40 24 40C23.172 40 22.5 39.328 22.5 38.5L22.5 19.5C22.5 17.015 20.485 15 18 15L9 15 z"
+								/> -->
+							</Input>
+							<Input
+								uuid={$statements[0].newTransactions[$activeRecordID]?.uuid}
+								bind:field={$activeFieldName}
+								bind:inputValue={$statements[0].newTransactions[$activeRecordID].ope}
+								placeholder="Ope"
+								guidePlaceholder="Type now..."
+								message="You messed up"
+								identifier="ope"
+							>
+								<!-- <path
+									slot="icon"
+									d="M23.958984 2 A 1.50015 1.50015 0 0 0 23.455078 2.1035156L2.9550781 10.103516 A 1.50015 1.50015 0 1 0 4.0449219 12.896484L24 5.109375L43.955078 12.896484 A 1.50015 1.50015 0 1 0 45.044922 10.103516L24.544922 2.1035156 A 1.50015 1.50015 0 0 0 23.958984 2 z M 9 15C7.343 15 6 16.343 6 18L6 39C6 40.657 7.343 42 9 42L20.554688 42C21.247688 43.191 22.523 44 24 44C25.477 44 26.752312 43.191 27.445312 42L39 42C40.657 42 42 40.657 42 39L42 18C42 16.343 40.657 15 39 15L30 15C27.515 15 25.5 17.015 25.5 19.5L25.5 38.5C25.5 39.328 24.828 40 24 40C23.172 40 22.5 39.328 22.5 38.5L22.5 19.5C22.5 17.015 20.485 15 18 15L9 15 z"
+								/> -->
+							</Input>
+							<Input
+								uuid={$statements[0].newTransactions[$activeRecordID]?.uuid}
+								bind:field={$activeFieldName}
+								bind:inputValue={$statements[0].newTransactions[$activeRecordID].narration}
+								placeholder="Narration"
+								guidePlaceholder="Type now..."
+								message="You messed up"
+								identifier="narration"
+							>
+								<!-- <path
+									slot="icon"
+									d="M23.958984 2 A 1.50015 1.50015 0 0 0 23.455078 2.1035156L2.9550781 10.103516 A 1.50015 1.50015 0 1 0 4.0449219 12.896484L24 5.109375L43.955078 12.896484 A 1.50015 1.50015 0 1 0 45.044922 10.103516L24.544922 2.1035156 A 1.50015 1.50015 0 0 0 23.958984 2 z M 9 15C7.343 15 6 16.343 6 18L6 39C6 40.657 7.343 42 9 42L20.554688 42C21.247688 43.191 22.523 44 24 44C25.477 44 26.752312 43.191 27.445312 42L39 42C40.657 42 42 40.657 42 39L42 18C42 16.343 40.657 15 39 15L30 15C27.515 15 25.5 17.015 25.5 19.5L25.5 38.5C25.5 39.328 24.828 40 24 40C23.172 40 22.5 39.328 22.5 38.5L22.5 19.5C22.5 17.015 20.485 15 18 15L9 15 z"
+								/> -->
+							</Input>
 
 							<button
 								type="button"
@@ -5834,10 +6888,10 @@
 									computeTransactions(filteredAfterDelete);
 
 									let transactionRecordsLength = $statements[0].newTransactions.length;
-									console.log(`recordToDeleteIndex: ${recordToDeleteIndex}`);
-									console.log(`transactionRecordsLength: ${transactionRecordsLength}`);
+									// console.log(`recordToDeleteIndex: ${recordToDeleteIndex}`);
+									// console.log(`transactionRecordsLength: ${transactionRecordsLength}`);
 									if (recordToDeleteIndex === transactionRecordsLength) {
-										console.log('it is true');
+										// console.log('it is true');
 										$activeRecordID = transactionRecordsLength - 1;
 										$selectedRowUUID = $statements[0].newTransactions[$activeRecordID].uuid;
 										// console.log(filteredAfterDelete);
@@ -5854,7 +6908,7 @@
 						
 								<InputNumber
 									on:numberChanged={(e) => {
-										console.log(e.detail.numberVal);
+										// console.log(e.detail.numberVal);
 										computeTransactions($statements[0].newTransactions);
 									}}
 									bind:inputValue={$bundleSizeStore}
@@ -5927,6 +6981,9 @@
 														date: duplicateCopy[0].date,
 														bookingDate: duplicateCopy[0].bookingDate,
 														valueDate: duplicateCopy[0].valueDate,
+														branch: duplicateCopy[0].branch,
+														ope: duplicateCopy[0].ope,
+														narration: duplicateCopy[0].narration,
 														description: duplicateCopy[0].description,
 														more: duplicateCopy[0].more,
 														type: duplicateCopy[0].type,
@@ -5940,8 +6997,8 @@
 											}
 
 											buildDuplicateCopies(bundleSize).then((duplicateBundle) => {
-												console.log('Duplicate Bundle: ');
-												console.log(duplicateBundle);
+												// console.log('Duplicate Bundle: ');
+												// console.log(duplicateBundle);
 												newCollectionWithDuplicateBundle =
 													$statements[0].newTransactions.concat(duplicateBundle);
 												// $statements[0].newTransactions = newCollectionWithDuplicateBundle;
@@ -6031,7 +7088,7 @@
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<label
 								on:click={(e) => {
-									console.log(e);
+									// console.log(e);
 
 									if ($statements[0].newTransactions[$activeRecordID].type === 'in') {
 										$statements[0].newTransactions[$activeRecordID].type = 'out';
@@ -6051,7 +7108,7 @@
 								<input
 									type="button"
 									on:click={(e) => {
-										console.log(e);
+										// console.log(e);
 
 										if ($statements[0].newTransactions[$activeRecordID].type === 'in') {
 											$statements[0].newTransactions[$activeRecordID].type = 'out';
@@ -6128,7 +7185,7 @@
 								<input
 									type="checkbox"
 									on:change={(e) => {
-										console.log(e);
+										// console.log(e);
 									}}
 									bind:checked={$showMoreDescription}
 									name=""
@@ -6218,7 +7275,7 @@
 									<!-- <input
 									type="range"
 									on:change={(e) => {
-										console.log(e);
+										// console.log(e);
 									}}
 									bind:value={$zoomLevel}
 									min="0"
@@ -6285,7 +7342,7 @@
 													);
 													// randomizeDateRange($dateRange);
 
-													console.log($dateRange);
+													// console.log($dateRange);
 
 													// console.log(`This date is out of range: ${e.detail.dateVal}`);
 													// if (
@@ -6333,7 +7390,7 @@
 													// const startDateElmt = document.getElementById('startdate');
 													startDateElmtIsON = !startDateElmtIsON;
 
-													console.log(e.currentTarget.parentNode.childNodes[0]);
+													// console.log(e.currentTarget.parentNode.childNodes[0]);
 												}}
 											>
 												<svg
@@ -6398,7 +7455,7 @@
 													);
 													// randomizeDateRange($dateRange);
 
-													console.log($dateRange);
+													// console.log($dateRange);
 
 													// console.log(`This date is out of range: ${e.detail.dateVal}`);
 													// if (
@@ -6446,7 +7503,7 @@
 													// const startDateElmt = document.getElementById('startdate');
 													endDateElmtIsON = !endDateElmtIsON;
 
-													console.log(e.currentTarget.parentNode.childNodes[0]);
+													// console.log(e.currentTarget.parentNode.childNodes[0]);
 												}}
 											>
 												<svg
@@ -6577,15 +7634,17 @@
 				>
 					<div class="flex flex-col space-y-4 items-center w-full h-fit m-0">
 						<div class="flex flex-col space-y-0 text-slate-700/50">
-							<h2 class="font-semibold text-l5">Header style</h2>
+							<h2 class="font-semibold text-l5">Template style</h2>
 							<span class="font-normal text-xs opacity-80"
 								>For better results, pick a header style that matches your data</span
 							>
 						</div>
-						<div class="flex justify-between space-x-2 items-center w-full h-fit m-0 {transition}">
+						<div class="flex flex-wrap gap-2 w-full h-fit m-0 {transition} ">
 							<button
 								on:click={(e) => {
 									$displayHeaderChoice = 1;
+									removeBorders();
+									applyConfiguration($displayHeaderChoice)
 								}}
 								type="button"
 								class=" {$displayHeaderChoice === 1
@@ -6614,8 +7673,8 @@
 							<button
 								on:click={(e) => {
 									$displayHeaderChoice = 2;
-
 									removeBorders();
+									applyConfiguration($displayHeaderChoice)
 								}}
 								type="button"
 								class="
@@ -6647,8 +7706,10 @@
 							<button
 								on:click={(e) => {
 									$displayHeaderChoice = 3;
+									renderBorders()
+									applyConfiguration($displayHeaderChoice)
 
-									removeBorders();
+									// removeBorders();
 								}}
 								type="button"
 								class="
@@ -6672,6 +7733,108 @@
 									/>
 									<div
 										class="{$displayHeaderChoice === 3
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[60%] h-[5px]"
+									/>
+								</div>
+							</button>
+							<button
+								on:click={(e) => {
+									$displayHeaderChoice = 4;
+									removeBorders();
+									applyConfiguration($displayHeaderChoice)
+								}}
+								type="button"
+								class="
+								{$displayHeaderChoice === 4
+									? 'bg-gradient-to-tr from-slate-600 to-slate-400'
+									: 'bg-gradient-to-bl from-white/40 to-white/60'} 
+								rounded-md flex items-center py-1 w-[47%] scale-100 {transition}"
+							>
+								<!-- <div class="bg-gray-50/50 rounded-sm w-6 h-6 m-2" /> -->
+
+								<div class="flex flex-col justify-center w-[70px] h-10 space-y-1 ml-2">
+									<div
+										class="{$displayHeaderChoice === 4
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[80%] h-[5px]"
+									/>
+									<div
+										class="{$displayHeaderChoice === 4
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[70%] h-[5px]"
+									/>
+									<div
+										class="{$displayHeaderChoice === 4
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[60%] h-[5px]"
+									/>
+								</div>
+							</button>
+							<button
+								on:click={(e) => {
+									$displayHeaderChoice = 5;
+									removeBorders();
+									applyConfiguration($displayHeaderChoice)
+
+									// $statements[0].transactionHeaders.bookingDate.counter = 2
+									// $statements[0].transactionHeaders.ref.counter = 0
+									// $statements[0].transactionHeaders..counter = 0
+									// applyConfiguration([],3,'logo',0) // headings, date format, logo, theme
+									
+								}}
+								type="button"
+								class="
+								{$displayHeaderChoice === 5
+									? 'bg-gradient-to-tr from-slate-600 to-slate-400'
+									: 'bg-gradient-to-bl from-white/40 to-white/60'} 
+								rounded-md flex items-center py-1 w-[47%] scale-100 {transition}"
+							>
+								<!-- <div class="bg-gray-50/50 rounded-sm w-6 h-6 m-2" /> -->
+
+								<div class="flex flex-col justify-center w-[70px] h-10 space-y-1 ml-2">
+									<div
+										class="{$displayHeaderChoice === 5
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[80%] h-[5px]"
+									/>
+									<div
+										class="{$displayHeaderChoice === 5
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[70%] h-[5px]"
+									/>
+									<div
+										class="{$displayHeaderChoice === 5
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[60%] h-[5px]"
+									/>
+								</div>
+							</button>
+							<button
+								on:click={(e) => {
+									$displayHeaderChoice = 6;
+									renderBorders()
+									applyConfiguration($displayHeaderChoice)
+								}}
+								type="button"
+								class=" {$displayHeaderChoice === 6
+									? 'bg-gradient-to-tr from-slate-600 to-slate-400'
+									: 'bg-gradient-to-bl from-white/40 to-white/60'}   rounded-md flex items-center py-1 w-[47%] scale-100 {transition}"
+							>
+								<div
+									class="{$displayHeaderChoice === 6
+										? 'bg-white/50'
+										: 'bg-gray-50/50'} {transition} rounded-sm w-6 h-6 m-2"
+								/>
+
+								<div class="flex flex-col justify-center w-[70px] h-10 space-y-1">
+									<div
+										class="{$displayHeaderChoice === 6
+											? 'bg-white/50'
+											: 'bg-gray-50/50'} {transition} rounded-sm w-[80%] h-[7px]"
+									/>
+									<div
+										class="{$displayHeaderChoice === 6
 											? 'bg-white/50'
 											: 'bg-gray-50/50'} {transition} rounded-sm w-[60%] h-[5px]"
 									/>
@@ -6750,7 +7913,7 @@
 														// document.querySelector('#my-vid')?.setAttribute('src', mediaUrl);
 														//console.log(mediaUrl);
 
-														console.log($logoUrl);
+														// console.log($logoUrl);
 													}}
 													class="sr-only"
 												/>
@@ -6839,7 +8002,7 @@
 						<!-- <input
 							type="range"
 							on:change={(e) => {
-								console.log(e);
+								// console.log(e);
 							}}
 							bind:value={$zoomLevel}
 							min="0"
@@ -6855,7 +8018,7 @@
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						<label
 							on:click={(e) => {
-								console.log(e);
+								// console.log(e);
 
 								$statements[0].configurations.columnHeaders.renderDateColumn =
 									!$statements[0].configurations.columnHeaders.renderDateColumn;
@@ -6870,7 +8033,7 @@
 							<input
 								type="button"
 								on:click={(e) => {
-									console.log(e);
+									// console.log(e);
 
 									$statements[0].configurations.columnHeaders.renderDateColumn =
 										!$statements[0].configurations.columnHeaders.renderDateColumn;
@@ -7037,7 +8200,7 @@
 							<input
 								type="button"
 								on:click={(e) => {
-									console.log(e);
+									// console.log(e);
 								}}
 								name=""
 								id="shuffleInsLabel"
@@ -7122,7 +8285,7 @@
 							<input
 								type="button"
 								on:click={(e) => {
-									console.log(e);
+									// console.log(e);
 								}}
 								name=""
 								id="shuffleInsLabel"
@@ -7207,7 +8370,7 @@
 							<input
 								type="button"
 								on:click={(e) => {
-									console.log(e);
+									// console.log(e);
 								}}
 								name=""
 								id="shuffleInsLabel"
@@ -7292,7 +8455,7 @@
 							<input
 								type="button"
 								on:click={(e) => {
-									console.log(e);
+									// console.log(e);
 								}}
 								name=""
 								id="shuffleInsLabel"
@@ -7378,7 +8541,7 @@
 							<input
 								type="button"
 								on:click={(e) => {
-									console.log(e);
+									// console.log(e);
 								}}
 								name=""
 								id="shuffleInsLabel"
@@ -7463,7 +8626,7 @@
 							<input
 								type="button"
 								on:click={(e) => {
-									console.log(e);
+									// console.log(e);
 								}}
 								name=""
 								id="shuffleInsLabel"
@@ -7548,7 +8711,7 @@
 							<input
 								type="button"
 								on:click={(e) => {
-									console.log(e);
+									// console.log(e);
 								}}
 								name=""
 								id="shuffleInsLabel"
@@ -7633,7 +8796,7 @@
 							<input
 								type="button"
 								on:click={(e) => {
-									console.log(e);
+									// console.log(e);
 								}}
 								name=""
 								id="shuffleInsLabel"
@@ -7764,6 +8927,15 @@
 </main>
 
 <style>
+
+	 
+	#viewport::-webkit-scrollbar-thumb {
+		border: 5px solid rgba(0, 0, 0, 0);
+		background-clip: padding-box;
+		border-radius: 6px;
+		/* background-color: #AAAAAA; */
+	}
+	
 	/* .statementTabisOn {
 		transform: translateX(0);
 		transition: all 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);

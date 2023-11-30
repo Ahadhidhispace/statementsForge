@@ -47,6 +47,7 @@ export const handle = async ({ event, resolve }) => {
   console.log('Checking my session here:')
   console.log(mySession)
 
+  // disable auth
   	if (mySession === null || mySession === undefined) {
 
       if (!event.url.pathname.startsWith("/access")) {

@@ -1,4 +1,5 @@
 <script>
+	import {activeFieldName }from '../activeFieldNameStore.js' 
 	import { onMount } from 'svelte';
 
 	export let inputValue = '';
@@ -15,8 +16,9 @@
 <div class="relative max-h-fit transition-all duration-500 ease-out">
 	<input
 		on:focus={(e) => {
-			field = 'description';
-			console.log(`I am a uuid from Description component: ${uuid}`);
+			$activeFieldName = field;
+			field = $activeFieldName || identifier.toLowerCase();
+			console.log(`I am a uuid from ${$activeFieldName} component: ${uuid}`);
 		}}
 		on:blur={(e) => {
 			field = '';
@@ -31,7 +33,7 @@
 		placeholder={error ? placeholder : guidePlaceholder}
 	/>
 	<label
-		for="floatingInputDegree"
+		for={identifier}
 		class="pointer-events-none flex items-center absolute left-0 top-0 origin-[0_0] border-none px-4 py-5 text-black/30 transition-all duration-200 ease-out -translate-y-4 text-xs peer-focus:-translate-y-4 peer-focus:translate-x-[0.15rem] scale-[0.85] peer-focus:scale-[0.85] {error
 			? 'peer-focus:text-red-600 text-red-600'
 			: 'peer-focus:text-sky-600'}  peer-[:not(:placeholder-shown)]:-translate-y-4 peer-[:not(:placeholder-shown)]:translate-x-[0.15rem] peer-[:not(:placeholder-shown)]:scale-[0.85] transition-all duration-300 ease-out"

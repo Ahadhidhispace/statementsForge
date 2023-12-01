@@ -4213,6 +4213,7 @@
 
 											<div
 												class="
+												{$displayHeaderChoice === 3 && 'w-auto flex-1' }
 												{$displayHeaderChoice === 4 && 'order-5' }
 												{$displayHeaderChoice === 5 ? 'order-2 w-[20%]':'w-[28%]' }
 												{$statements[0].configurations.columnHeaders
@@ -4698,6 +4699,7 @@
 																// console.log(element);
 															}}
 															class="
+															{$displayHeaderChoice === 3 && 'w-auto flex-1' }
 															{$displayHeaderChoice === 4 && 'order-5' }
 															{$displayHeaderChoice === 5 && 'order-2' }
 															{$displayHeaderChoice === 5 ? 'w-[20%]':'w-[28%]' }

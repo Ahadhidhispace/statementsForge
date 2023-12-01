@@ -963,6 +963,8 @@
 						'EEE, MMMM d, yyyy',
 						'yyyy-MM-dd',
 						'yyyy/MM/dd',
+						'dd MMM yyyy',
+						'dd MMMM yyyy',
 						'MM-dd-yyyy',
 						'MM/dd/yyyy',
 						'MMMM d yyyy',
@@ -2659,12 +2661,12 @@
 		}else if (templateStyle === 3){
 
 			// configure headers
-			$statements[0].transactionHeaders.renderRefColumn = true
+			$statements[0].transactionHeaders.renderRefColumn = false
 			$statements[0].transactionHeaders.renderBookingDateColumn = true
 			$statements[0].transactionHeaders.renderValueDateColumn = true
 			$statements[0].transactionHeaders.renderDescriptionColumn = true
-			$statements[0].transactionHeaders.renderBranchColumn = true
-			$statements[0].transactionHeaders.renderOpeColumn = true
+			$statements[0].transactionHeaders.renderBranchColumn = false
+			$statements[0].transactionHeaders.renderOpeColumn = false
 			$statements[0].transactionHeaders.renderInColumn = true
 			$statements[0].transactionHeaders.renderOutColumn = true
 			$statements[0].transactionHeaders.renderBalanceColumn = true
@@ -2672,10 +2674,10 @@
 			// configure headers
 			$statements[0].transactionHeaders.bookingDate.counter = 4	
 			$statements[0].transactionHeaders.valueDate.counter = 0	
-			$statements[0].transactionHeaders.branch.counter = 0	
-			$statements[0].transactionHeaders.ope.counter = 0	
-			$statements[0].transactionHeaders.ref.counter = 3	
-			$statements[0].transactionHeaders.description.counter = 2
+			// $statements[0].transactionHeaders.branch.counter = 0	
+			// $statements[0].transactionHeaders.ope.counter = 0	
+			// $statements[0].transactionHeaders.ref.counter = 3	
+			$statements[0].transactionHeaders.description.counter = 3
 			$statements[0].transactionHeaders.out.counter = 1	
 			$statements[0].transactionHeaders.in.counter = 1	
 			$statements[0].transactionHeaders.balance.counter = 0
@@ -2738,8 +2740,11 @@
 
 		}else if (templateStyle === 6){
 
+			// $statements[0].configurations.renderStartingBalanceRow = false
+
 			// configure headers
-			$statements[0].transactionHeaders.renderRefColumn = false
+			$statements[0].transactionHeaders.renderRefColumn = true
+			$statements[0].transactionHeaders.renderDescriptionColumn = true
 			$statements[0].transactionHeaders.renderBookingDateColumn = true
 			$statements[0].transactionHeaders.renderValueDateColumn = true
 			$statements[0].transactionHeaders.renderInColumn = true
@@ -2747,9 +2752,10 @@
 			$statements[0].transactionHeaders.renderBalanceColumn = true
 
 			// configure headers
-			$statements[0].transactionHeaders.bookingDate.counter = 4	
+			$statements[0].transactionHeaders.bookingDate.counter = 1	
 			$statements[0].transactionHeaders.valueDate.counter = 0	
 			$statements[0].transactionHeaders.description.counter = 2
+			$statements[0].transactionHeaders.ref.counter = 3	
 			$statements[0].transactionHeaders.out.counter = 1	
 			$statements[0].transactionHeaders.in.counter = 1	
 			$statements[0].transactionHeaders.balance.counter = 0
@@ -3217,7 +3223,23 @@
 												{/if}
 											</div>
 										</section>
-									</section>	
+									</section>
+									<section
+										class=" flex flex-col justify-center items-end py-3 h-fit w-full text-black/60"
+									>
+										
+										<h2 class=" font-semibold text-sm">
+											<span class="opacity-100">{format(
+																new Date($statements[0].duration.dueDate.value),
+																$statements[0].duration.dueDate.formats[4]
+															)}</span>
+										</h2>
+										<h2 class=" font-semibold text-sm">
+											{time}
+										</h2>
+										<!-- {$statements[0].footer.bankOfficer.label}: {$statements[0].footer.bankOfficer.value} -->
+									</section>
+
 								{/if}
 								{#if $displayHeaderChoice === 6}
 									<section class="flex justify-end items-center">
@@ -3840,93 +3862,55 @@
 											<table class="table-auto w-[40%] font-semibold text-sm">
 												<tbody class="flex justify-between">
 													<tr class=" flex flex-col">
-														<td class="">Account Name:</td>
+														<td class="">Account Statement for the period:</td>
 														<td class="">Account Number:</td>
-														<td class="">Account Currency:</td>
-														<td class="">Branch Name:</td>
-														<td class="">Start Period:</td>
-														<td class="">End Period:</td>
+														<td class="">Account Name:</td>
+														<td class="">Currency:</td>
+														<td class="">Printed By:</td>
+														<td class="">Branch:</td>
+														<td class="">Date:</td>
+												
 													</tr>
 													<tr class=" flex flex-col">
-														<td class="">{$statements[0].accountInfo.name.value}</td>
-														<td class="">{$statements[0].accountInfo.number.value}</td>
-														<td class=""
-															>{$currencies[$statements[0].accountInfo.currency.value].label}</td
-														>
-														<td class="">{$statements[0].accountInfo.branch.name.value}</td>
-														<td class=""
-															>{lightFormat(
+														<td class="">{lightFormat(
 																new Date($statements[0].duration.start.value),
-																'yyyy/MM/dd'
-															)}</td
-														>
-														<td class=""
-															>{lightFormat(
+																'yyyyMMdd'
+															)} to {lightFormat(
 																new Date($statements[0].duration.end.value),
-																'yyyy/MM/dd'
-															)}</td
+																'yyyyMMdd'
+															)}</td>
+														<td class="">{$statements[0].accountInfo.number.value}</td>
+														<td class="">{$statements[0].accountInfo.name.value}</td>
+														<td class=""
+															>{$currencies[$statements[0].accountInfo.currency.value].currency}</td
 														>
+														<td class="">{$statements[0].accountInfo.printedBy.name.value}</td>
+														<td class="">{$statements[0].accountInfo.branch.name.value}</td>
+														<td class="">{format(
+																new Date($statements[0].duration.dueDate.value),
+																$statements[0].duration.dueDate.formats[3]
+															).toUpperCase()}</td>
+														
 													</tr>
 												</tbody>
 											</table>
 											<table class="table-auto w-[30%] font-semibold text-sm">
 												<tbody class="flex justify-between">
 													<tr class=" flex flex-col">
-														<td class="">Date:</td>
-														<td class="">Time:</td>
-														<td class="">Opening Balance:</td>
-														<td class="">Total Debits:</td>
-														<td class="">Total Credits:</td>
-														<td class="">Closing Balance:</td>
+														<td class="">Address:</td>
+														<td class="">Phone:</td>
+														<td class="">Email:</td>
+														<td class="">Account Type:</td>
+														<td class="">IBAN:</td>
 													</tr>
 													<tr class=" flex flex-col">
-														<td class=""
-															>{format(
-																new Date($statements[0].duration.dueDate.value),
-																$statements[0].duration.dueDate.formats[0]
-															)}</td
-														>
-														<td class="">{time}</td>
-														<td class=""
-															>{$previousBalance !== null
-																? formatAmount(
-																		$previousBalance,
-																		'currency',
-																		$currencies[$statements[0].accountInfo.currency.value].currency,
-																		$currencies[$statements[0].accountInfo.currency.value].locale
-																  )
-																: formatAmount()}</td
-														>
-														<td class=""
-															>{$totalBalanceIn !== null
-																? formatAmount(
-																		$totalBalanceIn,
-																		'currency',
-																		$currencies[$statements[0].accountInfo.currency.value].currency,
-																		$currencies[$statements[0].accountInfo.currency.value].locale
-																  )
-																: formatAmount()}</td
-														>
-														<td class=""
-															>{$totalBalanceOut !== null
-																? formatAmount(
-																		$totalBalanceOut,
-																		'currency',
-																		$currencies[$statements[0].accountInfo.currency.value].currency,
-																		$currencies[$statements[0].accountInfo.currency.value].locale
-																  )
-																: formatAmount()}</td
-														>
-														<td class=""
-															>{$previousRowBalance !== null
-																? formatAmount(
-																		$previousRowBalance,
-																		'currency',
-																		$currencies[$statements[0].accountInfo.currency.value].currency,
-																		$currencies[$statements[0].accountInfo.currency.value].locale
-																  )
-																: formatAmount()}</td
-														>
+														<div class=""> {$statements[0].bankInfo.address.value}</div>
+														<div class=""> {$statements[0].bankInfo.call.mobile.value}</div>
+														<div class=""> {$statements[0].accountInfo.accountType.value}</div>
+														<div class=""> {$statements[0].bankInfo.email.value}</div>
+														<div class=""> {$statements[0].accountInfo.IBAN.value}</div>
+														
+														
 													</tr>
 												</tbody>
 											</table>
@@ -4127,7 +4111,7 @@
 								<form action="" class="w-[100%]">
 									<!-- <table class=" "> -->
 									<section
-										class="w-full h-12 {$displayHeaderChoice === 3
+										class="w-full h-12 {$displayHeaderChoice === 3 || $displayHeaderChoice === 6 
 											? 'bg-transparent text-black border-2 border-black/60 border-solid'
 											: `${$documentThemes[$activeTheme].bgHeader} text-white border-none`}  {transition}"
 									>
@@ -4186,7 +4170,7 @@
 											<div
 												class="
 												{$displayHeaderChoice === 4 ? ' order-2 block ':' sr-only' }
-												{$statements[0].configurations.columnHeaders.renderRefColumn ===
+												{$statements[0].configurations.columnHeaders.renderBranchColumn ===
 													true ||
 												$statements[0].configurations.columnHeaders.renderAllColumns === true
 													? 'opacity-100 scale-x-100 origin-left-right'
@@ -4201,7 +4185,7 @@
 											<div
 												class="
 												{$displayHeaderChoice === 4 ? ' order-3 block ':' sr-only' }
-												{ $statements[0].configurations.columnHeaders.renderRefColumn ===
+												{ $statements[0].configurations.columnHeaders.renderOpeColumn ===
 													true ||
 												$statements[0].configurations.columnHeaders.renderAllColumns === true
 													? 'opacity-100 scale-x-100 origin-left-right'
@@ -4246,6 +4230,7 @@
 
 											<div
 												class="
+												{$displayHeaderChoice === 3 && 'sr-only' }
 												{$displayHeaderChoice === 4 && 'order-4' }
 												{$displayHeaderChoice === 5 && 'order-1' }
 												{$displayHeaderChoice === 4 ? 'px-1 w-[10%] text-center ':'px-5 w-[20%] text-left' }
@@ -4313,7 +4298,7 @@
 											<!-- {/each} -->
 										</div>
 									</section>
-									{#if $displayHeaderChoice !== 3 && $displayHeaderChoice !== 4 && $displayHeaderChoice !== 5}
+									{#if $displayHeaderChoice !== 3 && $displayHeaderChoice !== 4 && $displayHeaderChoice !== 5 && $displayHeaderChoice !== 6}
 										<section class="flex flex-col w-full text-sm justify-start">
 											{#key newTransactions || $statements[0].newTransactions || $activeTheme}
 												<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -4769,6 +4754,7 @@
 																// console.log(element);
 															}}
 															class="
+															{$displayHeaderChoice === 3 && 'sr-only' }
 															{$displayHeaderChoice === 4 && 'order-4' }
 															{$displayHeaderChoice === 5 && 'order-1' }
 															{$displayHeaderChoice === 4 ? 'px-1 w-[10%] text-center':'px-5 w-[20%] text-left' }

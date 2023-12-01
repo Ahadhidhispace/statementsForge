@@ -2658,6 +2658,9 @@
 			// configure bank logo
 			$logoUrl = bprBankLogo
 
+			// configure theme
+			$activeTheme = 19
+
 		}else if (templateStyle === 2){
 			// configure bank logo
 			$logoUrl = equityBankLogo
@@ -2691,6 +2694,9 @@
 
 			// configure bank logo
 			$logoUrl = equityBankLogo
+
+			// configure theme
+			$activeTheme = 20
 		
 		}else if (templateStyle === 4){
 
@@ -2721,6 +2727,9 @@
 
 			// configure bank logo
 			$logoUrl = cogeBankLogo
+
+			// configure theme
+			$activeTheme = 12 // 9 8 19
 		
 		}else if (templateStyle === 5){
 			// configure row number 
@@ -2749,6 +2758,7 @@
 			// configure bank logo
 			$logoUrl = BKBankLogo
 			// configure theme
+			$activeTheme = 1 // 2 8 9 12 15 19 20 21 
 
 		}else if (templateStyle === 6){
 			// configure row number 
@@ -2775,7 +2785,10 @@
 			$statements[0].transactionHeaders.balance.counter = 0
 
 			// configure bank logo
-			$logoUrl = equityBankLogo	
+			$logoUrl = equityBankLogo
+
+			// configure theme
+			$activeTheme = 19	
 		}else{}
 		
 	}

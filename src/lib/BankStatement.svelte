@@ -2634,6 +2634,9 @@
 
 		if(templateStyle === 1){
 
+			// configure row number 
+			$statements[0].configurations.pageSettings.size = 24
+
 			// require dependency
 			$statements[0].configurations.columnHeaders.renderRefColumn = true
 			$statements[0].configurations.columnHeaders.renderBookingDateColumn = true
@@ -2656,9 +2659,13 @@
 			$logoUrl = bprBankLogo
 
 		}else if (templateStyle === 2){
-
+			// configure bank logo
+			$logoUrl = equityBankLogo
 
 		}else if (templateStyle === 3){
+
+			// configure row number 
+			$statements[0].configurations.pageSettings.size = 25
 
 			// configure headers
 			$statements[0].transactionHeaders.renderRefColumn = false
@@ -2687,6 +2694,9 @@
 		
 		}else if (templateStyle === 4){
 
+			// configure row number 
+			$statements[0].configurations.pageSettings.size = 24
+
 			// configure headers
 			$statements[0].transactionHeaders.renderValueDateColumn = true
 			$statements[0].transactionHeaders.renderBookingDateColumn = true
@@ -2713,6 +2723,8 @@
 			$logoUrl = cogeBankLogo
 		
 		}else if (templateStyle === 5){
+			// configure row number 
+			$statements[0].configurations.pageSettings.size = 14 
 
 			// configure headers
 			$statements[0].transactionHeaders.renderBookingDateColumn = true
@@ -2739,6 +2751,8 @@
 			// configure theme
 
 		}else if (templateStyle === 6){
+			// configure row number 
+			$statements[0].configurations.pageSettings.size = 25
 
 			// $statements[0].configurations.renderStartingBalanceRow = false
 
@@ -3552,13 +3566,14 @@
 															class="{$documentThemes[$activeTheme]
 																.primaryActiveText} font-semibold text-4xl"
 														>
-															DHISPACE
-															<span class="font-light"> BANK, LLC.</span>
+															{$statements[0].bankInfo.name.value}
+															<!-- <span class="font-light"> BANK, LLC.</span> -->
 														</h2>
 													</div>
 													<div class="address font-semibold text-sm text-black/60 mt-2">
-														<h2 class="">1234 Main Steet, Capital City, OH 12345-0123</h2>
-														<h2 class="">1-800-555-1234</h2>
+														<h2 class="">{$statements[0].bankInfo.street.value}, {$statements[0].bankInfo.capital.value} {$statements[0].bankInfo
+																		.city.value}</h2>
+														<h2 class="">{$statements[0].bankInfo.call.office.value}</h2>
 													</div>
 												</div>
 											</div>
